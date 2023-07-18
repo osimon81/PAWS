@@ -10,6 +10,7 @@
 #' @param h5_folder Path to the folder containing SLEAP H5s.
 #' @param save_folder Path to the folder where DeepLabCut-like CSVs will be saved.
 #' @return Converted CSVs stored in the `save_folder` directory.
+#' @import rhdf5
 #' @export
 h5_to_csv <- function(h5_folder, save_folder = NA) {
   if (is.na(save_folder)) {

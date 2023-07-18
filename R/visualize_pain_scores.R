@@ -7,6 +7,11 @@
 #' @param csv_path The path to the aggregated CSV exported from the `paws_analysis` function
 #' @param peak Whether to plot pre-peak (`pre`) or post-peak (`post`) pain scores.
 #' @return A density plot of pain score distributions.
+#' @import ggplot2
+#' @import pracma
+#' @import data.table
+#' @import ggpubr
+#' @import DT
 #' @export
 plot_pain_scores <- function(csv_path, peak = "pre") {
   if (peak != "pre" & peak != "post") {
@@ -93,6 +98,11 @@ plot_pain_scores <- function(csv_path, peak = "pre") {
 #' `post-peak distance traveled`, `post-peak number of shakes`, `post-peak shaking duration`,
 #' `post-peak guarding duration`
 #' @return A bar plot of PAWS features over a distribution.
+#' @import ggplot2
+#' @import pracma
+#' @import data.table
+#' @import ggpubr
+#' @import DT
 #' @export
 plot_paws_features <- function(csv_path, plot_features) {
   df <- read.csv(csv_path)

@@ -38,6 +38,11 @@
 #' if shake segmentation does not match what you see in a video, you can fine-tune the threshold
 #' to match your observations).
 #' @return A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
+#' @import ggplot2
+#' @import pracma
+#' @import data.table
+#' @import ggpubr
+#' @import DT
 #' @export
 paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           manual_scale_factor = NA, filter_chosen = "average", filter_length = 11,

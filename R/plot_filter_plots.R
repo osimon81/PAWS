@@ -23,6 +23,11 @@
 #' @param axis The axis you wish to plot.
 #' @return A figure with panels (each indicating the plotted track under a given filter
 #' and level and smoothing).
+#' @import ggplot2
+#' @import pracma
+#' @import data.table
+#' @import ggpubr
+#' @import DT
 #' @export
 plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
                                manual_scale_factor = NA, fps = 2000,
@@ -98,13 +103,13 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
 
   # smoothing filters (savitzky-golay, running median, running average)
 
-  col_savgol <- savgol(as.numeric(col), fl = savgol_window_length, forder = 3, dorder = 0)
+  col_savgol <- pracma::savgol(as.numeric(col), fl = savgol_window_length, forder = 3, dorder = 0)
   col_median <- runmed(as.numeric(col), k = median_window_length, endrule = c("keep"))
-  col_average <- frollmean(as.numeric(col), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
+  col_average <- data.table::frollmean(as.numeric(col), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
 
   sample_tracking <- data.frame(csv$scorer, col, col_savgol, col_median, col_average, conf)
 
-  a <- ggplot(data = sample_tracking) +
+  a <- ggplot2::ggplot(data = sample_tracking) +
     geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col, alpha = as.numeric(conf)), color = "blue") +
     labs(x = "time (s)",
          y = "distance (mm)",
@@ -112,7 +117,7 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
          alpha = "Confidence") +
     theme_classic()
 
-  b <- ggplot(data = sample_tracking) +
+  b <- ggplot2::ggplot(data = sample_tracking) +
     geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_savgol,  alpha = as.numeric(conf)), color = "orange") +
     labs(x = "time (s)",
          y = "distance (mm)",
@@ -120,7 +125,7 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
          alpha = "Confidence") +
     theme_classic()
 
-  c <- ggplot(data = sample_tracking) +
+  c <- ggplot2::ggplot(data = sample_tracking) +
     geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_median, alpha = as.numeric(conf)), color = "darkred") +
     labs(x = "time (s)",
          y = "distance (mm)",
@@ -128,7 +133,7 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
          alpha = "Confidence") +
     theme_classic()
 
-  d <- ggplot(data = sample_tracking) +
+  d <- ggplot2::ggplot(data = sample_tracking) +
     geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_average, alpha = as.numeric(conf)), color = "purple") +
     labs(x = "time (s)",
          y = "distance (mm)",
@@ -171,6 +176,11 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
 #' to your tracking trajectory.
 #' @return A figure with diagnostic panels (indicating unannotated and annotated univariate projections,
 #' and estimated horizontal and vertical positions and velocities).
+#' @import ggplot2
+#' @import pracma
+#' @import data.table
+#' @import ggpubr
+#' @import DT
 #' @export
 plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filter = "none", body_part = "center",
                                        reference_distance, fps = 2000, savgol_window_length = 11,
@@ -240,14 +250,14 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
 
   # smoothing filters (savitzky-golay, running median, running average)
 
-  col_savgol_x <- savgol(as.numeric(col_x), fl = savgol_window_length, forder = 3, dorder = 0)
-  col_savgol_y <- savgol(as.numeric(col_y), fl = savgol_window_length, forder = 3, dorder = 0)
+  col_savgol_x <- pracma::savgol(as.numeric(col_x), fl = savgol_window_length, forder = 3, dorder = 0)
+  col_savgol_y <- pracma::savgol(as.numeric(col_y), fl = savgol_window_length, forder = 3, dorder = 0)
 
   col_median_x <- as.numeric(runmed(as.numeric(col_x), k = median_window_length, endrule = c("keep")))
   col_median_y <- as.numeric(runmed(as.numeric(col_y), k = median_window_length, endrule = c("keep")))
 
-  col_average_x <- frollmean(as.numeric(col_x), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
-  col_average_y <- frollmean(as.numeric(col_y), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
+  col_average_x <- data.table::frollmean(as.numeric(col_x), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
+  col_average_y <- data.table::frollmean(as.numeric(col_y), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
 
   sample_tracking <- data.frame(csv$scorer, col_x, col_y,
                                 col_savgol_x, col_savgol_y,
@@ -313,6 +323,11 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
 #' if shake segmentation does not match what you see in a video, you can fine-tune the threshold
 #' to match your observations).
 #' @return A data frame in RStudio containing PAWS scores for a single file.
+#' @import ggplot2
+#' @import pracma
+#' @import data.table
+#' @import ggpubr
+#' @import DT
 #' @export
 mini_paws <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filter = "none", body_part = "center", reference_distance,
                       fps = 2000, savgol_window_length = 11, median_window_length = 11,
@@ -388,8 +403,8 @@ mini_paws <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filte
     ps_pre_peak <- pain_score(features, strains = "C57B6-", feature.set = "pre.peak")
     ps_post_peak <- pain_score(features, strains = "C57B6-", feature.set = "post.peak")
   } else if (tolower(filter) == "savitzky-golay") {
-    col_x <- savgol(as.numeric(col_x), fl = savgol_window_length, forder = 3, dorder = 0)
-    col_y <- savgol(as.numeric(col_y), fl = savgol_window_length, forder = 3, dorder = 0)
+    col_x <- pracma::savgol(as.numeric(col_x), fl = savgol_window_length, forder = 3, dorder = 0)
+    col_y <- pracma::savgol(as.numeric(col_y), fl = savgol_window_length, forder = 3, dorder = 0)
     sample_tracking <- data.frame(csv$scorer, col_x, col_y, conf)
     features <- extract_features(x = sample_tracking$col_x, y = sample_tracking$col_y,
                                         diagnostics = TRUE, parameters = params)
@@ -404,8 +419,8 @@ mini_paws <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filte
     ps_pre_peak <- pain_score(features, strains = "C57B6-", feature.set = "pre.peak")
     ps_post_peak <- pain_score(features, strains = "C57B6-", feature.set = "post.peak")
   } else if (tolower(filter) == "average") {
-    col_x <- frollmean(as.numeric(col_x), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
-    col_y <- frollmean(as.numeric(col_y), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
+    col_x <- data.table::frollmean(as.numeric(col_x), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
+    col_y <- data.table::frollmean(as.numeric(col_y), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
     sample_tracking <- data.frame(csv$scorer, col_x, col_y, conf)
     features <- extract_features(x = as.numeric(na.omit(sample_tracking$col_x)), y = as.numeric(na.omit(sample_tracking$col_y)),
                                          diagnostics = TRUE, parameters = params)

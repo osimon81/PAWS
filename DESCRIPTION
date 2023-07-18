@@ -1,10 +1,10 @@
 Package: PAWS
-Title: Pain Assessment at Withdrawal Speeds
+Title: PAWS (Pain Assessment at Withdrawal Speeds)
 Version: 0.0.0.9000
 Authors@R: 
     person("Simon", "Ogundare", , "simon.ogundare@columbia.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6243-2779"))
-Description: What the package does (one paragraph).
+Description: A processing pipeline using pose-estimation software to score paw withdrawal behavior.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
@@ -22,7 +22,7 @@ Imports:
     data.table,
     DT,
     devtools,
-    pracma::savgol,
+    pracma,
     imputeTS,
     ggtext,
     plotly
