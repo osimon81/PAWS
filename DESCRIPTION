@@ -28,7 +28,9 @@ Imports:
     plotly,
     paws
 Remotes:
-    hadley/testthat,
+    hadley/testthat
+    crtwomey/paws
+SystemRequirements:
     crtwomey/paws
 Suggests: 
     knitr,
