@@ -25,8 +25,8 @@ library(PAWS)
 We're going to load two example CSVs. These CSVs were created using a custom script (see the `h5_to_csv()` function if you'd like to use it) which processes H5s exported from SLEAP into CSVs which can be run through PAWS:
 
 ```{r load sample light pinprick stimulations}
-lp_manual_stim <- read.csv(system.file("extdata", "Example_6J_female_lp_manual.csv", package = "PAWS"))
-lp_arm_stim <- read.csv(system.file("extdata", "Example_6J_female_lp_arm.csv", package = "PAWS"))
+lp_manual_stim <- system.file("extdata", "Example_6J_female_lp_manual.csv", package = "PAWS")
+lp_arm_stim <- system.file("extdata", "Example_6J_female_lp_arm.csv", package = "PAWS")
 ```
 
 ## Plotting sample data

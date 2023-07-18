@@ -22,11 +22,10 @@ Imports:
     data.table,
     DT,
     devtools,
-    pracma,
+    pracma::savgol,
     imputeTS,
     ggtext,
-    plotly,
-    paws
+    plotly
 Remotes:
         crtwomey/paws
 Suggests: 
