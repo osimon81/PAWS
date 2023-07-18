@@ -25,9 +25,11 @@ Imports:
     pracma,
     imputeTS,
     ggtext,
-    plotly
+    plotly,
+    paws
 Remotes:
-        crtwomey/paws
+    hadley/testthat,
+    crtwomey/paws
 Suggests: 
     knitr,
     rmarkdown
