@@ -32,3 +32,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://osimon81.github.io/PAWS/
