@@ -43,7 +43,6 @@
 #' @import data.table
 #' @import ggpubr
 #' @import DT
-#' @import paws
 #' @export
 paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           manual_scale_factor = NA, filter_chosen = "average", filter_length = 11,

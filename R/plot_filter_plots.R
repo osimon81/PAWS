@@ -27,7 +27,6 @@
 #' @import pracma
 #' @import data.table
 #' @import ggpubr
-#' @import DT
 #' @export
 plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
                                manual_scale_factor = NA, fps = 2000,
@@ -180,8 +179,6 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
 #' @import pracma
 #' @import data.table
 #' @import ggpubr
-#' @import DT
-#' @import paws
 #' @export
 plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filter = "none", body_part = "center",
                                        reference_distance, fps = 2000, savgol_window_length = 11,
@@ -328,8 +325,6 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
 #' @import pracma
 #' @import data.table
 #' @import ggpubr
-#' @import DT
-#' @import paws
 #' @export
 mini_paws <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filter = "none", body_part = "center", reference_distance,
                       fps = 2000, savgol_window_length = 11, median_window_length = 11,

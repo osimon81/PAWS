@@ -1,17 +1,22 @@
 Package: PAWS
 Title: PAWS (Pain Assessment at Withdrawal Speeds)
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R: c(
     person("Simon", "Ogundare", , "simon.ogundare@columbia.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-6243-2779"))
+           comment = c(ORCID = "0000-0002-6243-2779")),
+    person("Colin", "Twomey", email="crtwomey@gmail.com", role="aut"),
+    person("Ishmail", "Abdus-Saboor", role="aut"))
 Description: A processing pipeline using pose-estimation software to score paw withdrawal behavior.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+             Automated pain scoring from paw withdrawal tracking data. Based on
+             Jones et al. (2020) A machine-vision approach for automated pain
+             measurement at millisecond timescales.
+License: use_gpl3_license()
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 biocViews:
 Imports:
+    signal (>= 0.7),
     ggpubr,
     rhdf5,
     ggplot2,
@@ -25,15 +30,12 @@ Imports:
     pracma,
     imputeTS,
     ggtext,
-    plotly,
-    paws
-Remotes:
-    hadley/testthat
-    crtwomey/paws
-SystemRequirements:
-    crtwomey/paws
+    plotly
 Suggests: 
     knitr,
     rmarkdown
+Depends:
+    R (>= 3.6),
+    brglm2 (>= 0.6)
 VignetteBuilder: knitr
 URL: https://osimon81.github.io/PAWS/
