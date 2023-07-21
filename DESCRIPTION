@@ -30,7 +30,8 @@ Imports:
     pracma,
     imputeTS,
     ggtext,
-    plotly
+    plotly,
+    stringr
 Suggests: 
     knitr,
     rmarkdown

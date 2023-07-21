@@ -6,9 +6,11 @@
 #' that are the output of many PAWS functions will appear in their corresponding tabs here, too.
 #'
 #' @return The PAWS dashboard.
+#' @import shiny
+#' @import shinydashboard
 #' @export
 paws_dashboard <- function() {
-  ui <- dashboardPage(
+  ui <- shinydashboard::dashboardPage(
     dashboardHeader(title = "PAWS Dashboard"),
     dashboardSidebar(
 

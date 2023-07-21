@@ -42,6 +42,7 @@
 #' @import pracma
 #' @import data.table
 #' @import ggpubr
+#' @import stringr
 #' @import DT
 #' @export
 paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
@@ -70,9 +71,9 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
 
   index = 1
 
-  file_names <- list.files(csvDirectory, pattern="*.csv", recursive = TRUE,
+  file_names <- list.files(csv_directory, pattern="*.csv", recursive = TRUE,
                       full.names = FALSE)
-  file_paths <- list.files(csvDirectory, pattern="*.csv", recursive = TRUE,
+  file_paths <- list.files(csv_directory, pattern="*.csv", recursive = TRUE,
                       full.names = TRUE)
 
   for (i in 1:length(file_paths)) {
@@ -163,17 +164,18 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     # Inverting the y-axis for regions so the lowest position is 0
 
     for (body_part in body_parts) {
-      tracks[[body_part]][['y']] <- max(tracks[[body_part]][['y']]) - tracks[[body_part]][['y']]
+      tracks[[body_part]][['y']] <- max(na.omit(tracks[[body_part]][['y']])) - tracks[[body_part]][['y']]
     }
+
 
     # Omitting tracking data below the p-cutoff threshold [experimental - TALK THROUGH]
 
     for (body_part in body_parts) {
       x_track <- tracks[[body_part]][['x']]
-      x_track[tracks[[body_part]][['p']] < p_cutoff] <- NA
+      x_track[which(tracks[[body_part]][['p']] < p_cutoff)] <- NA
       tracks[[body_part]][['x']] <- imputeTS::na_interpolation(x_track, option = "linear")
       y_track <- tracks[[body_part]][['y']]
-      y_track[tracks[[body_part]][['p']] < p_cutoff] <- NA
+      y_track[which(tracks[[body_part]][['p']] < p_cutoff)] <- NA
       tracks[[body_part]][['y']] <- imputeTS::na_interpolation(y_track, option = "linear")
     }
 
@@ -305,6 +307,13 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     order(combined_dataframe[,1], combined_dataframe[,2], combined_dataframe[,3]),
   ]
 
-  write.csv(combined_dataframe, paste0(saveDirectory, "/", "PAWS_Results.csv"), row.names = FALSE)
+  write.csv(combined_dataframe, paste0(save_directory, "/", "PAWS_Results.csv"), row.names = FALSE)
 }
+
+
+
+
+
+
+
 
