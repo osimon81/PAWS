@@ -84,7 +84,18 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     # Assign stimulation types, assign groups, and assign NAs if no ID detected
 
     stim <- stims[which(str_detect(tolower(substr(file_names[index],1,nchar(file_names[index])-3)), tolower(stims)))]
-    group <- groups[which(str_detect(tolower(substr(file_names[index],1,nchar(file_names[index])-3)), tolower(groups)))]
+
+    group_val <- NA
+
+    for (group_index in 1:length(groups)) {
+      int <- grep(paste0("\\", groups[group_index]), file_names[index])
+      if (length(int) == 1) {
+        group_val <- group_index
+        break
+      }
+    }
+
+    group <- groups[group_val]
 
     if (length(stim) == 0) {
       stim = "no_stim_ID"
@@ -173,10 +184,15 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     for (body_part in body_parts) {
       x_track <- tracks[[body_part]][['x']]
       x_track[which(tracks[[body_part]][['p']] < p_cutoff)] <- NA
-      tracks[[body_part]][['x']] <- imputeTS::na_interpolation(x_track, option = "linear")
+      tryCatch(tracks[[body_part]][['x']] <- imputeTS::na_interpolation(x_track, option = "linear"),
+               error = function(e) { skip_to_next <- TRUE})
+      if(skip_to_next) { next }
       y_track <- tracks[[body_part]][['y']]
       y_track[which(tracks[[body_part]][['p']] < p_cutoff)] <- NA
-      tracks[[body_part]][['y']] <- imputeTS::na_interpolation(y_track, option = "linear")
+      tryCatch(tracks[[body_part]][['y']] <- imputeTS::na_interpolation(y_track, option = "linear"),
+               error = function(e) { skip_to_next <- TRUE})
+      if(skip_to_next) { next }
+
     }
 
     # calculating confident scale factor for video (using distance formula):
