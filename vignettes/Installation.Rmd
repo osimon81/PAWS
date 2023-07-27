@@ -16,7 +16,7 @@ library(PAWS)
 
 To test that all PAWS functions are correctly loaded, test out the PAWS dashboard:
 
-```{r}
+```{r test PAWS, eval = FALSE}
 paws_dashboard()
 ```
 
