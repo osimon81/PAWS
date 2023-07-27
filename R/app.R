@@ -191,7 +191,7 @@ paws_dashboard <- function() {
                   ),
                   box(
                     title = "PAWS metrics: Toe",
-                    DT::dataTableOutput("toe_table_diagnostics"),
+                    DT::DTOutput("toe_table_diagnostics"),
                     width = 12
                   ),
 
@@ -213,7 +213,7 @@ paws_dashboard <- function() {
                   ),
                   box(
                     title = "PAWS metrics: Center",
-                    DT::dataTableOutput("center_table_diagnostics"),
+                    DT::DTOutput("center_table_diagnostics"),
                     width = 12
                   ),
                 ),
@@ -234,7 +234,7 @@ paws_dashboard <- function() {
                   ),
                   box(
                     title = "PAWS metrics: Heel",
-                    DT::dataTableOutput("heel_table_diagnostics"),
+                    DT::DTOutput("heel_table_diagnostics"),
                     width = 12
                   ),
                 )

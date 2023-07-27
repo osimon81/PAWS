@@ -1,0 +1,22 @@
+# Install PAWS [GitHub - Development Version]
+
+To install the development version of PAWS, run the lines below in RStudio. The `devtools` package is required to install packages developed on GitHub:
+
+```{r install and load devtools, eval = FALSE}
+install.packages("devtools")
+library("devtools")
+```
+
+Then, install the PAWS package directly from GitHub:
+
+```{r install and load PAWS, eval = FALSE}
+install_github("osimon81/PAWS")
+library(PAWS)
+```
+
+To test that all PAWS functions are correctly loaded, test out the PAWS dashboard:
+
+```{r}
+paws_dashboard()
+```
+

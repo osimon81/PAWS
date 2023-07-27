@@ -9,9 +9,9 @@
 #' @return A density plot of pain score distributions.
 #' @import ggplot2
 #' @import pracma
-#' @import data.table
 #' @import ggpubr
-#' @import DT
+#' @importFrom dplyr select, filter
+#' @import magrittr
 #' @export
 plot_pain_scores <- function(csv_path, peak = "pre") {
   if (peak != "pre" & peak != "post") {
@@ -102,7 +102,6 @@ plot_pain_scores <- function(csv_path, peak = "pre") {
 #' @import pracma
 #' @import data.table
 #' @import ggpubr
-#' @import DT
 #' @export
 plot_paws_features <- function(csv_path, plot_features) {
   df <- read.csv(csv_path)

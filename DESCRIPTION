@@ -2,8 +2,9 @@ Package: PAWS
 Title: PAWS (Pain Assessment at Withdrawal Speeds)
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Simon", "Ogundare", , "simon.ogundare@columbia.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-6243-2779")),
+    person("Simon", "Ogundare", , "simon.ogundare@columbia.edu", role = c("aut", "cre")),
+    person("Justin", "Burdge", email="jb4582@columbia.edu", role="aut"),
+    person("Anissa", "Jhumka", email="aj3020@columbia.edu", role="aut"),
     person("Colin", "Twomey", email="crtwomey@gmail.com", role="aut"),
     person("Ishmail", "Abdus-Saboor", role="aut"))
 Description: A processing pipeline using pose-estimation software to score paw withdrawal behavior.
