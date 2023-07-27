@@ -1,3 +1,12 @@
+---
+title: "Installation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Installation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
 # Install PAWS [GitHub - Development Version]
 
 To install the development version of PAWS, run the lines below in RStudio. The `devtools` package is required to install packages developed on GitHub:
