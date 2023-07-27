@@ -7,7 +7,7 @@ install.packages("devtools")
 library("devtools")
 ```
 
-Then, install the PAWS package directly from GitHub:
+Then, install the PAWS package directly from GitHub. When prompted to update packages, we recommend updating CRAN packages only:
 
 ```{r install and load PAWS, eval = FALSE}
 install_github("osimon81/PAWS")

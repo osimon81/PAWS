@@ -10,7 +10,7 @@
 #' @import ggplot2
 #' @import pracma
 #' @import ggpubr
-#' @importFrom dplyr select, filter
+#' @import dplyr
 #' @import magrittr
 #' @export
 plot_pain_scores <- function(csv_path, peak = "pre") {
