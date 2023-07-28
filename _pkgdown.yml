@@ -1,3 +1,4 @@
 url: https://osimon81.github.io/PAWS
 template:
-  bootswatch: lux
+  bootstrap: 5
+  bootswatch: yeti
