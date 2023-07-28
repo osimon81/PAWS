@@ -2,16 +2,16 @@ Package: PAWS
 Title: PAWS (Pain Assessment at Withdrawal Speeds)
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Simon", "Ogundare", , "simon.ogundare@columbia.edu", role = c("aut", "cre")),
-    person("Justin", "Burdge", email="jb4582@columbia.edu", role="aut"),
-    person("Anissa", "Jhumka", email="aj3020@columbia.edu", role="aut"),
-    person("Colin", "Twomey", email="crtwomey@gmail.com", role="aut"),
-    person("Ishmail", "Abdus-Saboor", role="aut"))
+    person("Simon", "Ogundare", role = c("aut", "cre"), email = "simon.ogundare@columbia.edu"),
+    person("Justin", "Burdge", role =  c("aut", "dtc"), email = "jb4582@columbia.edu"),
+    person("Anissa", "Jhumka", role = c("aut", "dtc"), email = "aj3020@columbia.edu"),
+    person("Colin", "Twomey", role = "aut", email = "crtwomey@gmail.com"),
+    person("Ishmail", "Abdus-Saboor", role="aut", email = "ia2458@columbia.edu"))
 Description: A processing pipeline using pose-estimation software to score paw withdrawal behavior.
              Automated pain scoring from paw withdrawal tracking data. Based on
              Jones et al. (2020) A machine-vision approach for automated pain
              measurement at millisecond timescales.
-License: use_gpl3_license()
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3

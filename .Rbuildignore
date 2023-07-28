@@ -4,3 +4,6 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^doc$
+^Meta$
+^LICENSE\.md$

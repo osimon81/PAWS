@@ -1,8 +1,8 @@
 ---
-title: "Introduction"
+title: "Tutorial"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction}
+  %\VignetteIndexEntry{Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -94,9 +94,9 @@ You will generally want to pick a p-cutoff based off of the confidence of your m
 
 ## Running PAWS diagnostics
 
-PAWS runs analysis primarily on a univariate projection — a combination of the x and y components, weighted based off of how much movement there is in a particular axis. It's important to not only graph the raw trajectories of a paw over time, but also to graph the univariate projection and other diagnostic plots built into paws. To produce these plots using the settings from the most recent smoothing settings, you can run the following function:
+PAWS runs analysis primarily on a univariate projection — a combination of the x and y components, weighted based off of how much movement there is in a particular axis. It's important to not only graph the raw trajectories of a paw over time in each axis, but also to graph the univariate projection and other diagnostic plots built into `paws` when troubleshooting or optimizing your workflow. To produce these plots using the settings from the most recent smoothing settings, you can run the following function:
 
-```{r plotting smoothed univariate projection with average filter}
+```{r plotting smoothed univariate projection with average filter, fig.height = 5, fig.width = 3}
 plot_univariate_projection(csv_or_path = lp_arm_stim,
                    p_cutoff = 0.8,
                    reference_distance = 40,
@@ -109,7 +109,7 @@ plot_univariate_projection(csv_or_path = lp_arm_stim,
 
 You'll notice how the plots above are much smoother than if we run diagnostics on the same video, without smoothing the data first (shown below):
 
-```{r plotting raw univariate projection}
+```{r plotting raw univariate projection, fig.height = 5, fig.width = 3}
 plot_univariate_projection(csv_or_path = lp_arm_stim,
                    p_cutoff = 0,
                    reference_distance = 40,
