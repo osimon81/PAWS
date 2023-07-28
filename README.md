@@ -1,11 +1,3 @@
----
-title: "Home"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Home}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
 
 ## Welcome to the PAWS package!
 
