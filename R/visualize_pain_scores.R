@@ -12,6 +12,7 @@
 #' @import ggpubr
 #' @import dplyr
 #' @import magrittr
+#' @import pawscore
 #' @export
 plot_pain_scores <- function(csv_path, peak = "pre") {
   if (peak != "pre" & peak != "post") {
@@ -102,6 +103,7 @@ plot_pain_scores <- function(csv_path, peak = "pre") {
 #' @import pracma
 #' @import data.table
 #' @import ggpubr
+#' @import pawscore
 #' @export
 plot_paws_features <- function(csv_path, plot_features) {
   df <- read.csv(csv_path)

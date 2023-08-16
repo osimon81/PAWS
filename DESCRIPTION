@@ -32,7 +32,8 @@ Imports:
     imputeTS,
     ggtext,
     plotly,
-    stringr
+    stringr,
+    pawscore
 Suggests: 
     knitr,
     rmarkdown
