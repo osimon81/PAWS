@@ -126,7 +126,7 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
          y = "distance (mm)",
          title = "Raw tracking",
          alpha = "Confidence",
-         color = "Passing y-threshold") +
+         color = "Above y-threshold") +
     theme_classic()
 
   b <- ggplot2::ggplot(data = sample_tracking) +
@@ -135,7 +135,7 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
          y = "distance (mm)",
          title = paste0("Savitzky-Golay filter (size ", as.character(savgol_window_length), ")"),
          alpha = "Confidence",
-         color = "Passing y-threshold") +
+         color = "Above y-threshold") +
     theme_classic()
 
   c <- ggplot2::ggplot(data = sample_tracking) +
@@ -144,7 +144,7 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
          y = "distance (mm)",
          title = paste0("Rolling Median filter (size ", as.character(median_window_length), ")"),
          alpha = "Confidence",
-         color = "Passing y-threshold") +
+         color = "Above y-threshold") +
     theme_classic()
 
   d <- ggplot2::ggplot(data = sample_tracking) +
@@ -153,7 +153,7 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
          y = "distance (mm)",
          title = paste0("Rolling Average filter (size ", as.character(average_window_length), ")"),
          alpha = "Confidence",
-         color = "Passing y-threshold") +
+         color = "Above y-threshold") +
     theme_classic()
 
 
