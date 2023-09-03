@@ -12,6 +12,11 @@
 #' If you indicate a `manual_scale_factor`, this setting will be overrided by that factor.
 #' @param manual_scale_factor The 'real-world-length' to pixel conversion factor (i.e. millimeters/pixel).
 #' If you are using two reference points, you can ignore this parameter.
+#' @param fixed_baseline The height (in units of choice) above the lowest y-axis position of the paw, used
+#' to determine the baseline for activity. the `y_threshold` parameter is used to set a baseline for this
+#' level of activity.
+#' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
+#' time-points of activity are determined.
 #' @param fps The frames per second of your CSV.
 #' @param savgol_window_length The rolling window length of Savitzky-Golay filter smoothing to apply
 #' to your tracking trajectory.
@@ -31,6 +36,8 @@
 #' @export
 plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
                                manual_scale_factor = NA, fps = 2000,
+                               fixed_baseline = 0,
+                               y_threshold = 5,
                                savgol_window_length = 25, median_window_length = 25,
                                average_window_length = 25, body_part = "center", axis = "y") {
 
@@ -108,37 +115,45 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
   col_average <- data.table::frollmean(as.numeric(col), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
 
   sample_tracking <- data.frame(csv$scorer, col, col_savgol, col_median, col_average, conf)
+  sample_tracking$col_raw_threshold <- ifelse(sample_tracking$col < fixed_baseline+y_threshold, FALSE, TRUE)
+  sample_tracking$col_savgol_threshold <- ifelse(sample_tracking$col_savgol < fixed_baseline+y_threshold, FALSE, TRUE)
+  sample_tracking$col_median_threshold <- ifelse(sample_tracking$col_median < fixed_baseline+y_threshold, FALSE, TRUE)
+  sample_tracking$col_average_threshold <- ifelse(sample_tracking$col_average < fixed_baseline+y_threshold, FALSE, TRUE)
 
   a <- ggplot2::ggplot(data = sample_tracking) +
-    geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col, alpha = as.numeric(conf)), color = "blue") +
+    geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col, alpha = as.numeric(conf), color = col_raw_threshold)) +
     labs(x = "time (s)",
          y = "distance (mm)",
          title = "Raw tracking",
-         alpha = "Confidence") +
+         alpha = "Confidence",
+         color = "Passing y-threshold") +
     theme_classic()
 
   b <- ggplot2::ggplot(data = sample_tracking) +
-    geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_savgol,  alpha = as.numeric(conf)), color = "orange") +
+    geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_savgol,  alpha = as.numeric(conf), color = col_savgol_threshold)) +
     labs(x = "time (s)",
          y = "distance (mm)",
          title = paste0("Savitzky-Golay filter (size ", as.character(savgol_window_length), ")"),
-         alpha = "Confidence") +
+         alpha = "Confidence",
+         color = "Passing y-threshold") +
     theme_classic()
 
   c <- ggplot2::ggplot(data = sample_tracking) +
-    geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_median, alpha = as.numeric(conf)), color = "darkred") +
+    geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_median, alpha = as.numeric(conf), color = col_median_threshold)) +
     labs(x = "time (s)",
          y = "distance (mm)",
          title = paste0("Rolling Median filter (size ", as.character(median_window_length), ")"),
-         alpha = "Confidence") +
+         alpha = "Confidence",
+         color = "Passing y-threshold") +
     theme_classic()
 
   d <- ggplot2::ggplot(data = sample_tracking) +
-    geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_average, alpha = as.numeric(conf)), color = "purple") +
+    geom_point(mapping = aes(x = as.numeric(csv.scorer)/fps, y = col_average, alpha = as.numeric(conf), color = col_average_threshold)) +
     labs(x = "time (s)",
          y = "distance (mm)",
          title = paste0("Rolling Average filter (size ", as.character(average_window_length), ")"),
-         alpha = "Confidence") +
+         alpha = "Confidence",
+         color = "Passing y-threshold") +
     theme_classic()
 
 

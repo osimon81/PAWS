@@ -37,6 +37,11 @@
 #' for shaking behaviors. Higher values apply a more conservative shaking threshold (Tip:
 #' if shake segmentation does not match what you see in a video, you can fine-tune the threshold
 #' to match your observations).
+#' @param fixed_baseline The height (in units of choice) above the lowest y-axis position of the paw, used
+#' to determine the baseline for activity. the `y_threshold` parameter is used to set a baseline for this
+#' level of activity.
+#' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
+#' time-points of activity are determined.
 #' @return A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
 #' @import ggplot2
 #' @import pracma
@@ -44,6 +49,7 @@
 #' @import ggpubr
 #' @import stringr
 #' @import dplyr
+#' @import pawscore
 #' @export
 paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           manual_scale_factor = NA, filter_chosen = "average", filter_length = 11,
@@ -51,6 +57,8 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           body_parts = c("toe", "center", "heel"),
                           reference_points = c("objecta", "objectb"),
                           groups, fps = 2000, window_threshold = 0.5,
+                          fixed_baseline = 0,
+                          y_threshold = 5,
                           shake_threshold = 0.35) {
 
   start_time <- Sys.time()
@@ -64,7 +72,9 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
 
   params <- set_parameters(fps = fps,
                            shake.threshold = shake_threshold,
-                           window.threshold = window_threshold)
+                           window.threshold = window_threshold,
+                           fixed.baseline = list(y = fixed_baseline,
+                                                 threshold = y_threshold))
 
   # Sets the initial index value to 1, corresponding to the first CSV in the
   # folder, and sets the directory.
