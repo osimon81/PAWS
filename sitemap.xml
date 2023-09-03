@@ -22,40 +22,13 @@
     <loc>https://osimon81.github.io/PAWS/index.html</loc>
   </url>
   <url>
-    <loc>https://osimon81.github.io/PAWS/reference/create_pain_model.html</loc>
-  </url>
-  <url>
-    <loc>https://osimon81.github.io/PAWS/reference/create_strain_standard.html</loc>
-  </url>
-  <url>
-    <loc>https://osimon81.github.io/PAWS/reference/default_parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://osimon81.github.io/PAWS/reference/default_standards.html</loc>
-  </url>
-  <url>
-    <loc>https://osimon81.github.io/PAWS/reference/extract_features.html</loc>
-  </url>
-  <url>
     <loc>https://osimon81.github.io/PAWS/reference/h5_to_csv.html</loc>
   </url>
   <url>
     <loc>https://osimon81.github.io/PAWS/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://osimon81.github.io/PAWS/reference/jones2020.tracks.html</loc>
-  </url>
-  <url>
     <loc>https://osimon81.github.io/PAWS/reference/mini_paws.html</loc>
-  </url>
-  <url>
-    <loc>https://osimon81.github.io/PAWS/reference/pain_class.html</loc>
-  </url>
-  <url>
-    <loc>https://osimon81.github.io/PAWS/reference/pain_score.html</loc>
-  </url>
-  <url>
-    <loc>https://osimon81.github.io/PAWS/reference/paws.html</loc>
   </url>
   <url>
     <loc>https://osimon81.github.io/PAWS/reference/paws_analysis.html</loc>
@@ -74,8 +47,5 @@
   </url>
   <url>
     <loc>https://osimon81.github.io/PAWS/reference/plot_univariate_projection.html</loc>
-  </url>
-  <url>
-    <loc>https://osimon81.github.io/PAWS/reference/set_parameters.html</loc>
   </url>
 </urlset>
