@@ -36,8 +36,8 @@
 #' @export
 plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
                                manual_scale_factor = NA, fps = 2000,
-                               fixed_baseline = 0,
-                               y_threshold = 5,
+                               fixed_baseline = 1,
+                               y_threshold = 0.1,
                                savgol_window_length = 25, median_window_length = 25,
                                average_window_length = 25, body_part = "center", axis = "y") {
 
@@ -197,14 +197,21 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
 #' @import ggpubr
 #' @import pawscore
 #' @export
-plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filter = "none", body_part = "center",
-                                       reference_distance, fps = 2000, savgol_window_length = 11,
+plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filter = "none",
+                                       body_part = "center", reference_distance, fps = 2000, savgol_window_length = 11,
                                        median_window_length = 11, average_window_length = 11,
-                                       shake_threshold = 0.35, window_threshold = 0.5) {
+                                       shake_threshold = 0.35, window_threshold = 0.5,
+                                       fixed_baseline = 1, y_threshold = 0.1) {
 
   params <- set_parameters(fps = fps,
-                 shake.threshold = shake_threshold,
-                 window.threshold = window_threshold)
+                           shake.threshold = shake_threshold,
+                           window.threshold = window_threshold,
+                           fixed.baseline = list(y = fixed_baseline,
+                                                 threshold = y_threshold))
+
+  # params <- set_parameters(fps = fps,
+  #                          shake.threshold = shake_threshold,
+  #                          window.threshold = window_threshold)
 
   if (is.character(csv_or_path)) {
     csv <- read.csv(csv_or_path, header = FALSE)
@@ -281,13 +288,13 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
                                 conf)
 
   raw_features <- extract_features(x = sample_tracking$col_x, y = sample_tracking$col_y,
-                                   diagnostics = TRUE, parameters = params)
+                                   parameters = params, diagnostics = TRUE)
   savgol_features <- extract_features(x = sample_tracking$col_savgol_x, y = sample_tracking$col_savgol_y,
-                                      diagnostics = TRUE, parameters = params)
+                                      parameters = params, diagnostics = TRUE)
   median_features <- extract_features(x = sample_tracking$col_median_x, y = sample_tracking$col_median_y,
-                                      diagnostics = TRUE, parameters = params)
+                                      parameters = params, diagnostics = TRUE)
   average_features <- extract_features(x = as.numeric(na.omit(sample_tracking$col_average_x)), y = as.numeric(na.omit(sample_tracking$col_average_y)),
-                                      diagnostics = TRUE, parameters = params)
+                                      parameters = params, diagnostics = TRUE)
 
   plotlist <- list(raw_features,
                    savgol_features,
@@ -346,12 +353,15 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
 #' @export
 mini_paws <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filter = "none", body_part = "center", reference_distance,
                       fps = 2000, savgol_window_length = 11, median_window_length = 11,
-                      average_window_length = 11, shake_threshold = 0.35, window_threshold = 0.5) {
+                      average_window_length = 11, shake_threshold = 0.35, window_threshold = 0.5,
+                      fixed_baseline = 1, y_threshold = 0.1) {
 
 
   params <- set_parameters(fps = fps,
                            shake.threshold = shake_threshold,
-                           window.threshold = window_threshold)
+                           window.threshold = window_threshold,
+                           fixed.baseline = list(y = fixed_baseline,
+                                                 threshold = y_threshold))
 
   if (is.character(csv_or_path)) {
     csv <- read.csv(csv_or_path, header = FALSE)
