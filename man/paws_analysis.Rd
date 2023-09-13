@@ -18,7 +18,10 @@ paws_analysis(
   groups,
   fps = 2000,
   window_threshold = 0.5,
-  shake_threshold = 0.35
+  fixed_baseline = 0,
+  y_threshold = 0.5,
+  shake_threshold = 0.35,
+  savgol_filter_smoothing_multiplier = 3
 )
 }
 \arguments{
@@ -61,6 +64,13 @@ group scored data by experimental group in the final output file, so you don't h
 
 \item{window_threshold}{The threshold to examine a given window of tracking activity
 for a withdrawal behavior. Higher values apply a more conservative window threshold.}
+
+\item{fixed_baseline}{The height (in units of choice) above the lowest y-axis position of the paw, used
+to determine the baseline for activity. the \code{y_threshold} parameter is used to set a baseline for this
+level of activity.}
+
+\item{y_threshold}{The threshold (in units of choice) above the fixed baseline at which the start and end
+time-points of activity are determined.}
 
 \item{shake_threshold}{The threshold to examine a given window of tracking activity
 for shaking behaviors. Higher values apply a more conservative shaking threshold (Tip:

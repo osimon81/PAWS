@@ -38,8 +38,8 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
                                manual_scale_factor = NA, fps = 2000,
                                fixed_baseline = 1,
                                y_threshold = 0.1,
-                               savgol_window_length = 25, median_window_length = 25,
-                               average_window_length = 25, body_part = "center", axis = "y") {
+                               savgol_window_length = 25, savgol_filter_smoothing_multiplier = 3,
+                               median_window_length = 25, average_window_length = 25, body_part = "center", axis = "y") {
 
   if (is.character(csv_or_path)) {
     csv <- read.csv(csv_or_path, header = FALSE)
@@ -111,6 +111,10 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
   # smoothing filters (savitzky-golay, running median, running average)
 
   col_savgol <- pracma::savgol(as.numeric(col), fl = savgol_window_length, forder = 3, dorder = 0)
+  col_savgol[1:(savgol_window_length*savgol_filter_smoothing_multiplier)] <- col_savgol[(savgol_window_length*savgol_filter_smoothing_multiplier)]
+  col_savgol[(length(col_savgol) - savgol_window_length*savgol_filter_smoothing_multiplier):length(col_savgol)] <- col_savgol[length(col_savgol) - savgol_window_length*savgol_filter_smoothing_multiplier]
+
+
   col_median <- runmed(as.numeric(col), k = median_window_length, endrule = c("keep"))
   col_average <- data.table::frollmean(as.numeric(col), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
 
@@ -178,6 +182,11 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
 #' @param filter The filter chosen to smooth tracked trajectories.
 #' Options are "none", "savitzky-golay", "median", or "average" (average recommended)
 #' @param body_part The body_part you wish to plot.
+#' @param fixed_baseline The height (in units of choice) above the lowest y-axis position of the paw, used
+#' to determine the baseline for activity. the `y_threshold` parameter is used to set a baseline for this
+#' level of activity.
+#' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
+#' time-points of activity are determined.
 #' @param reference_distance The 'real-world-length' between your reference objects (can be in mm, cm, etc).
 #' If you indicate a `manual_scale_factor`, this setting will be overrided by that factor.
 #' @param fps The frames per second of your CSV.
@@ -199,19 +208,16 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
 #' @export
 plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_cutoff = 0, filter = "none",
                                        body_part = "center", reference_distance, fps = 2000, savgol_window_length = 11,
+                                       savgol_filter_smoothing_multiplier = 3,
                                        median_window_length = 11, average_window_length = 11,
                                        shake_threshold = 0.35, window_threshold = 0.5,
-                                       fixed_baseline = 1, y_threshold = 0.1) {
+                                       fixed_baseline = 0.5, y_threshold = 0.1) {
 
   params <- set_parameters(fps = fps,
                            shake.threshold = shake_threshold,
                            window.threshold = window_threshold,
                            fixed.baseline = list(y = fixed_baseline,
                                                  threshold = y_threshold))
-
-  # params <- set_parameters(fps = fps,
-  #                          shake.threshold = shake_threshold,
-  #                          window.threshold = window_threshold)
 
   if (is.character(csv_or_path)) {
     csv <- read.csv(csv_or_path, header = FALSE)
@@ -273,13 +279,17 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
   # smoothing filters (savitzky-golay, running median, running average)
 
   col_savgol_x <- pracma::savgol(as.numeric(col_x), fl = savgol_window_length, forder = 3, dorder = 0)
+  col_savgol_x[1:(savgol_window_length*savgol_filter_smoothing_multiplier)] <- col_savgol_x[(savgol_window_length*savgol_filter_smoothing_multiplier)]
+  col_savgol_x[(length(col_savgol_x) - savgol_window_length*savgol_filter_smoothing_multiplier):length(col_savgol_x)] <- col_savgol_x[length(col_savgol_x) - savgol_window_length*savgol_filter_smoothing_multiplier]
   col_savgol_y <- pracma::savgol(as.numeric(col_y), fl = savgol_window_length, forder = 3, dorder = 0)
+  col_savgol_y[1:(savgol_window_length*savgol_filter_smoothing_multiplier)] <- col_savgol_y[(savgol_window_length*savgol_filter_smoothing_multiplier)]
+  col_savgol_y[(length(col_savgol_y) - savgol_window_length*savgol_filter_smoothing_multiplier):length(col_savgol_y)] <- col_savgol_y[length(col_savgol_y) - savgol_window_length*savgol_filter_smoothing_multiplier]
 
   col_median_x <- as.numeric(runmed(as.numeric(col_x), k = median_window_length, endrule = c("keep")))
   col_median_y <- as.numeric(runmed(as.numeric(col_y), k = median_window_length, endrule = c("keep")))
 
-  col_average_x <- data.table::frollmean(as.numeric(col_x), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
-  col_average_y <- data.table::frollmean(as.numeric(col_y), n = average_window_length, algo = "exact", align = "center") # experimental, beware of NAs
+  col_average_x <- data.table::frollmean(as.numeric(col_x), n = average_window_length, algo = "exact", align = "center")
+  col_average_y <- data.table::frollmean(as.numeric(col_y), n = average_window_length, algo = "exact", align = "center")
 
   sample_tracking <- data.frame(csv$scorer, col_x, col_y,
                                 col_savgol_x, col_savgol_y,
@@ -288,10 +298,12 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
                                 conf)
 
   raw_features <- extract_features(x = sample_tracking$col_x, y = sample_tracking$col_y,
-                                   parameters = params, diagnostics = TRUE)
-  savgol_features <- extract_features(x = sample_tracking$col_savgol_x, y = sample_tracking$col_savgol_y,
+                                   parameters = set_parameters(
+                                     fixed.baseline = list(y = fixed_baseline, threshold = y_threshold),
+                                     based.on = params), diagnostics = TRUE)
+  savgol_features <- extract_features(x = as.numeric(sample_tracking$col_savgol_x), y = as.numeric(sample_tracking$col_savgol_y),
                                       parameters = params, diagnostics = TRUE)
-  median_features <- extract_features(x = sample_tracking$col_median_x, y = sample_tracking$col_median_y,
+  median_features <- extract_features(x = as.numeric(na.omit(sample_tracking$col_median_x)), y = as.numeric(na.omit(sample_tracking$col_median_y)),
                                       parameters = params, diagnostics = TRUE)
   average_features <- extract_features(x = as.numeric(na.omit(sample_tracking$col_average_x)), y = as.numeric(na.omit(sample_tracking$col_average_y)),
                                       parameters = params, diagnostics = TRUE)
@@ -327,6 +339,11 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
 #' @param filter The filter chosen to smooth tracked trajectories.
 #' Options are "none", "savitzky-golay", "median", or "average" (average recommended)
 #' @param body_part The body_parts you wish to plot.
+#' @param fixed_baseline The height (in units of choice) above the lowest y-axis position of the paw, used
+#' to determine the baseline for activity. the `y_threshold` parameter is used to set a baseline for this
+#' level of activity.
+#' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
+#' time-points of activity are determined.
 #' @param reference_distance The 'real-world-length' between your reference objects (can be in mm, cm, etc).
 #' If you indicate a `manual_scale_factor`, this setting will be overrided by that factor.
 #' @param fps The frames per second of your CSV.

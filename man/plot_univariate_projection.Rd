@@ -13,10 +13,13 @@ plot_univariate_projection(
   reference_distance,
   fps = 2000,
   savgol_window_length = 11,
+  savgol_filter_smoothing_multiplier = 3,
   median_window_length = 11,
   average_window_length = 11,
   shake_threshold = 0.35,
-  window_threshold = 0.5
+  window_threshold = 0.5,
+  fixed_baseline = 0.5,
+  y_threshold = 0.1
 )
 }
 \arguments{
@@ -46,6 +49,13 @@ to your tracking trajectory.}
 
 \item{average_window_length}{The rolling window length of average filter smoothing to apply
 to your tracking trajectory.}
+
+\item{fixed_baseline}{The height (in units of choice) above the lowest y-axis position of the paw, used
+to determine the baseline for activity. the \code{y_threshold} parameter is used to set a baseline for this
+level of activity.}
+
+\item{y_threshold}{The threshold (in units of choice) above the fixed baseline at which the start and end
+time-points of activity are determined.}
 }
 \value{
 A figure with diagnostic panels (indicating unannotated and annotated univariate projections,

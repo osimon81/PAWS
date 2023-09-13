@@ -10,7 +10,10 @@ plot_filter_graphs(
   reference_distance = NA,
   manual_scale_factor = NA,
   fps = 2000,
+  fixed_baseline = 1,
+  y_threshold = 0.1,
   savgol_window_length = 25,
+  savgol_filter_smoothing_multiplier = 3,
   median_window_length = 25,
   average_window_length = 25,
   body_part = "center",
@@ -30,6 +33,13 @@ If you indicate a \code{manual_scale_factor}, this setting will be overrided by 
 If you are using two reference points, you can ignore this parameter.}
 
 \item{fps}{The frames per second of your CSV.}
+
+\item{fixed_baseline}{The height (in units of choice) above the lowest y-axis position of the paw, used
+to determine the baseline for activity. the \code{y_threshold} parameter is used to set a baseline for this
+level of activity.}
+
+\item{y_threshold}{The threshold (in units of choice) above the fixed baseline at which the start and end
+time-points of activity are determined.}
 
 \item{savgol_window_length}{The rolling window length of Savitzky-Golay filter smoothing to apply
 to your tracking trajectory.}

@@ -16,7 +16,9 @@ mini_paws(
   median_window_length = 11,
   average_window_length = 11,
   shake_threshold = 0.35,
-  window_threshold = 0.5
+  window_threshold = 0.5,
+  fixed_baseline = 1,
+  y_threshold = 0.1
 )
 }
 \arguments{
@@ -54,6 +56,13 @@ to match your observations).}
 
 \item{window_threshold}{The threshold to examine a given window of tracking activity
 for a withdrawal behavior. Higher values apply a more conservative window threshold.}
+
+\item{fixed_baseline}{The height (in units of choice) above the lowest y-axis position of the paw, used
+to determine the baseline for activity. the \code{y_threshold} parameter is used to set a baseline for this
+level of activity.}
+
+\item{y_threshold}{The threshold (in units of choice) above the fixed baseline at which the start and end
+time-points of activity are determined.}
 }
 \value{
 A data frame in RStudio containing PAWS scores for a single file.

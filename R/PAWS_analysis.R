@@ -58,8 +58,9 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           reference_points = c("objecta", "objectb"),
                           groups, fps = 2000, window_threshold = 0.5,
                           fixed_baseline = 0,
-                          y_threshold = 5,
-                          shake_threshold = 0.35) {
+                          y_threshold = 0.5,
+                          shake_threshold = 0.35,
+                          savgol_filter_smoothing_multiplier = 3) {
 
   start_time <- Sys.time()
 
@@ -189,7 +190,7 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     }
 
 
-    # Omitting tracking data below the p-cutoff threshold [experimental - TALK THROUGH]
+    # Omitting tracking data below the p-cutoff threshold
 
     for (body_part in body_parts) {
       x_track <- tracks[[body_part]][['x']]
@@ -210,9 +211,7 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     if (is.na(manual_scale_factor)) {
       scale_factor <- reference_distance / sqrt((mean(reference[[1]][['x']]) - mean(reference[[2]][['x']]))^2 +
                                                   (mean(reference[[1]][['y']]) - mean(reference[[2]][['y']]))^2)
-    }
-
-    else {
+    } else {
       scale_factor <- manual_scale_factor
     }
 
@@ -223,7 +222,13 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     for (body_part in body_parts) {
       if (tolower(filter_chosen) == "savitzky-golay") {
         tracks[[body_part]][['x']] <- savgol(tracks[[body_part]][['x']], fl = filter_length, forder = 3, dorder = 0)
+        tracks[[body_part]][['x']][1:(filter_length*savgol_filter_smoothing_multiplier)] <- tracks[[body_part]][['x']][(filter_length*savgol_filter_smoothing_multiplier)]
+        tracks[[body_part]][['x']][(length(tracks[[body_part]][['x']]) - filter_length*savgol_filter_smoothing_multiplier):length(tracks[[body_part]][['x']])] <- tracks[[body_part]][['x']][length(tracks[[body_part]][['x']]) - filter_length*savgol_filter_smoothing_multiplier]
+
         tracks[[body_part]][['y']] <- savgol(tracks[[body_part]][['y']], fl = filter_length, forder = 3, dorder = 0)
+        tracks[[body_part]][['y']][1:(filter_length*savgol_filter_smoothing_multiplier)] <- tracks[[body_part]][['y']][(filter_length*savgol_filter_smoothing_multiplier)]
+        tracks[[body_part]][['y']][(length(tracks[[body_part]][['y']]) - filter_length*savgol_filter_smoothing_multiplier):length(tracks[[body_part]][['y']])] <- tracks[[body_part]][['y']][length(tracks[[body_part]][['y']]) - filter_length*savgol_filter_smoothing_multiplier]
+
       } else if (tolower(filter_chosen) == "median") {
         tracks[[body_part]][['x']] <- runmed(tracks[[body_part]][['x']], k = filter_length, endrule = "keep")
         tracks[[body_part]][['y']] <- runmed(tracks[[body_part]][['y']], k = filter_length, endrule = "keep")
