@@ -42,6 +42,8 @@ plot_filter_graphs(csv_or_path = lp_manual_stim,
                    savgol_window_length = 25,
                    median_window_length = 25,
                    average_window_length = 25,
+                   fixed_baseline = 1,
+                   y_threshold = 0.1,
                    body_part = "center",
                    axis = "y")
 ```
@@ -68,6 +70,8 @@ plot_filter_graphs(csv_or_path = lp_arm_stim,
                    savgol_window_length = 11,
                    median_window_length = 11,
                    average_window_length = 11,
+                   fixed_baseline = 1,
+                   y_threshold = 0.1,
                    body_part = "center",
                    axis = "y")
 ```
@@ -85,6 +89,8 @@ plot_filter_graphs(csv_or_path = lp_arm_stim,
                    savgol_window_length = 11,
                    median_window_length = 11,
                    average_window_length = 11,
+                   fixed_baseline = 1,
+                   y_threshold = 0.1,
                    body_part = "center",
                    axis = "y")
 ```
@@ -104,6 +110,8 @@ plot_univariate_projection(csv_or_path = lp_arm_stim,
                    filter = "average",
                    fps = 2000,
                    average_window_length = 11,
+                   fixed_baseline = 1,
+                   y_threshold = 0.1,
                    body_part = "center")
 ```
 
@@ -117,6 +125,8 @@ plot_univariate_projection(csv_or_path = lp_arm_stim,
                    filter = "none",
                    fps = 2000,
                    body_part = "center",
+                   fixed_baseline = 1,
+                   y_threshold = 0.1,
                    shake_threshold = 0.35)
 ```
 
@@ -131,6 +141,8 @@ toe <- mini_paws(
   csv_or_path = lp_arm_stim, p_cutoff = 0,
   reference_distance = 40, manual_scale_factor = NA,
   filter = "average", average_window_length = 11,
+  fixed_baseline = 1,
+  y_threshold = 0.1,
   fps = 2000, body_part = "toe"
 )
 
@@ -138,6 +150,8 @@ center <- mini_paws(
   csv_or_path = lp_arm_stim, p_cutoff = 0,
   reference_distance = 40, manual_scale_factor = NA,
   filter = "average", average_window_length = 11,
+  fixed_baseline = 1,
+  y_threshold = 0.1,
   fps = 2000, body_part = "center"
 )
 
@@ -145,6 +159,8 @@ heel <- mini_paws(
   csv_or_path = lp_arm_stim, p_cutoff = 0,
   reference_distance = 40, manual_scale_factor = NA,
   filter = "average", average_window_length = 11,
+  fixed_baseline = 1,
+  y_threshold = 0.1,
   fps = 2000, body_part = "heel"
 )
 
@@ -170,7 +186,9 @@ paws_analysis(csvDirectory = "demo/sample_data",
               body_parts = c("toe", "center", "heel"),
               reference_points = c("objecta", "objectb"), 
               groups = c("arm", "manual"), fps = 2000,
-              shake_threshold = 0.35)
+              shake_threshold = 0.35,
+              fixed_baseline = 1,
+              y_threshold = 0.1,)
 ```
 
 You can also accomplish all of the previous steps and analysis using an interactive dashboard by running the following code:
