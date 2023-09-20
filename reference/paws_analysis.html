@@ -69,7 +69,10 @@ into a single CSV containing pre- and post-peak metrics.</p>
 <span>  <span class="va">groups</span>,</span>
 <span>  fps <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>  window_threshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  shake_threshold <span class="op">=</span> <span class="fl">0.35</span></span>
+<span>  fixed_baseline <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  y_threshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  shake_threshold <span class="op">=</span> <span class="fl">0.35</span>,</span>
+<span>  savgol_filter_smoothing_multiplier <span class="op">=</span> <span class="fl">3</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -137,6 +140,17 @@ group scored data by experimental group in the final output file, so you don't h
 <dt>window_threshold</dt>
 <dd><p>The threshold to examine a given window of tracking activity
 for a withdrawal behavior. Higher values apply a more conservative window threshold.</p></dd>
+
+
+<dt>fixed_baseline</dt>
+<dd><p>The height (in units of choice) above the lowest y-axis position of the paw, used
+to determine the baseline for activity. the <code>y_threshold</code> parameter is used to set a baseline for this
+level of activity.</p></dd>
+
+
+<dt>y_threshold</dt>
+<dd><p>The threshold (in units of choice) above the fixed baseline at which the start and end
+time-points of activity are determined.</p></dd>
 
 
 <dt>shake_threshold</dt>

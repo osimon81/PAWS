@@ -61,7 +61,10 @@ along that axis.</p>
 <span>  reference_distance <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  manual_scale_factor <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  fps <span class="op">=</span> <span class="fl">2000</span>,</span>
+<span>  fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  savgol_window_length <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>  savgol_filter_smoothing_multiplier <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  median_window_length <span class="op">=</span> <span class="fl">25</span>,</span>
 <span>  average_window_length <span class="op">=</span> <span class="fl">25</span>,</span>
 <span>  body_part <span class="op">=</span> <span class="st">"center"</span>,</span>
@@ -92,6 +95,17 @@ If you are using two reference points, you can ignore this parameter.</p></dd>
 
 <dt>fps</dt>
 <dd><p>The frames per second of your CSV.</p></dd>
+
+
+<dt>fixed_baseline</dt>
+<dd><p>The height (in units of choice) above the lowest y-axis position of the paw, used
+to determine the baseline for activity. the <code>y_threshold</code> parameter is used to set a baseline for this
+level of activity.</p></dd>
+
+
+<dt>y_threshold</dt>
+<dd><p>The threshold (in units of choice) above the fixed baseline at which the start and end
+time-points of activity are determined.</p></dd>
 
 
 <dt>savgol_window_length</dt>

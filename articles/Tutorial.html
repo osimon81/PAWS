@@ -115,6 +115,8 @@ parameters:</p>
 <span>                   savgol_window_length <span class="op">=</span> <span class="fl">25</span>,</span>
 <span>                   median_window_length <span class="op">=</span> <span class="fl">25</span>,</span>
 <span>                   average_window_length <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>                   fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                   y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>                   body_part <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>                   axis <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Registered S3 method overwritten by 'quantmod':</span></span>
@@ -183,6 +185,8 @@ mouse in the ARM group:</p>
 <span>                   savgol_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>                   median_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>                   average_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>                   fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                   y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>                   body_part <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>                   axis <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Removed 10 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
@@ -206,6 +210,8 @@ data changes:</p>
 <span>                   savgol_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>                   median_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>                   average_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>                   fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                   y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>                   body_part <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>                   axis <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Removed 10 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
@@ -240,6 +246,8 @@ settings, you can run the following function:</p>
 <span>                   filter <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>                   fps <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>                   average_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>                   fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                   y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>                   body_part <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Tutorial_files/figure-html/plotting%20smoothed%20univariate%20projection%20with%20average%20filter-1.png" width="480"></p>
 <p>You’ll notice how the plots above are much smoother than if we run
@@ -253,6 +261,8 @@ below):</p>
 <span>                   filter <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                   fps <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>                   body_part <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>                   fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                   y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>                   shake_threshold <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Tutorial_files/figure-html/plotting%20raw%20univariate%20projection-1.png" width="480"></p>
 <p>Above, you can also alter the <code>shake_threshold</code> parameter
@@ -275,6 +285,8 @@ parts for our CSV:</p>
 <span>  csv_or_path <span class="op">=</span> <span class="va">lp_arm_stim</span>, p_cutoff <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  reference_distance <span class="op">=</span> <span class="fl">40</span>, manual_scale_factor <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  filter <span class="op">=</span> <span class="st">"average"</span>, average_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  fps <span class="op">=</span> <span class="fl">2000</span>, body_part <span class="op">=</span> <span class="st">"toe"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -282,6 +294,8 @@ parts for our CSV:</p>
 <span>  csv_or_path <span class="op">=</span> <span class="va">lp_arm_stim</span>, p_cutoff <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  reference_distance <span class="op">=</span> <span class="fl">40</span>, manual_scale_factor <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  filter <span class="op">=</span> <span class="st">"average"</span>, average_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  fps <span class="op">=</span> <span class="fl">2000</span>, body_part <span class="op">=</span> <span class="st">"center"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -289,6 +303,8 @@ parts for our CSV:</p>
 <span>  csv_or_path <span class="op">=</span> <span class="va">lp_arm_stim</span>, p_cutoff <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  reference_distance <span class="op">=</span> <span class="fl">40</span>, manual_scale_factor <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  filter <span class="op">=</span> <span class="st">"average"</span>, average_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  y_threshold <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  fps <span class="op">=</span> <span class="fl">2000</span>, body_part <span class="op">=</span> <span class="st">"heel"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -297,21 +313,21 @@ parts for our CSV:</p>
 <span></span>
 <span><span class="va">lp_arm_manual</span></span>
 <span><span class="co">#&gt;        pre.pain_score post.pain_score pre.max_height pre.max_x_velocity</span></span>
-<span><span class="co">#&gt; toe        -0.2558666       0.4081954       8.111239           1489.410</span></span>
-<span><span class="co">#&gt; center     -0.3108219       0.1133024       7.414087           1675.167</span></span>
-<span><span class="co">#&gt; heel       -0.5135491       3.7983165       6.051316           1477.692</span></span>
+<span><span class="co">#&gt; toe        -0.3116669      0.32753717       7.760343           1489.410</span></span>
+<span><span class="co">#&gt; center     -0.4265664     -0.02546354       6.696816           1675.167</span></span>
+<span><span class="co">#&gt; heel       -0.6157240      3.71363989       5.380741           1477.692</span></span>
 <span><span class="co">#&gt;        pre.max_y_velocity pre.distance_traveled post.max_height</span></span>
-<span><span class="co">#&gt; toe             1134.4717              12.82948       10.733584</span></span>
-<span><span class="co">#&gt; center          1036.6020              13.41530        8.681941</span></span>
-<span><span class="co">#&gt; heel             703.6586              11.20344       23.439847</span></span>
+<span><span class="co">#&gt; toe             1131.6070              12.20117       10.278125</span></span>
+<span><span class="co">#&gt; center          1033.9974              12.06299        7.873508</span></span>
+<span><span class="co">#&gt; heel             708.4806              10.23666       22.810259</span></span>
 <span><span class="co">#&gt;        post.max_x_velocity post.max_y_velocity post.distance_traveled</span></span>
-<span><span class="co">#&gt; toe               2483.291            1897.659               78.77853</span></span>
-<span><span class="co">#&gt; center            2235.985            1603.463               71.48808</span></span>
-<span><span class="co">#&gt; heel              1648.575            9300.921               98.83561</span></span>
+<span><span class="co">#&gt; toe               2483.291            1900.523               77.61317</span></span>
+<span><span class="co">#&gt; center            2235.985            1606.068               70.06825</span></span>
+<span><span class="co">#&gt; heel              1648.575            9296.099               98.83826</span></span>
 <span><span class="co">#&gt;        post.number_of_shakes post.shaking_duration post.guarding_duration</span></span>
-<span><span class="co">#&gt; toe                        4                0.0545                 0.0415</span></span>
-<span><span class="co">#&gt; center                     4                0.0535                 0.0460</span></span>
-<span><span class="co">#&gt; heel                       4                0.0255                 0.1555</span></span></code></pre></div>
+<span><span class="co">#&gt; toe                        4                0.0540                 0.0295</span></span>
+<span><span class="co">#&gt; center                     4                0.0535                 0.0270</span></span>
+<span><span class="co">#&gt; heel                       4                0.0245                 0.1650</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -334,7 +350,9 @@ the function to run it!]</p>
 <span>              body_parts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"toe"</span>, <span class="st">"center"</span>, <span class="st">"heel"</span><span class="op">)</span>,</span>
 <span>              reference_points <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"objecta"</span>, <span class="st">"objectb"</span><span class="op">)</span>, </span>
 <span>              groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arm"</span>, <span class="st">"manual"</span><span class="op">)</span>, fps <span class="op">=</span> <span class="fl">2000</span>,</span>
-<span>              shake_threshold <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span></code></pre></div>
+<span>              shake_threshold <span class="op">=</span> <span class="fl">0.35</span>,</span>
+<span>              fixed_baseline <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>              y_threshold <span class="op">=</span> <span class="fl">0.1</span>,<span class="op">)</span></span></code></pre></div>
 <p>You can also accomplish all of the previous steps and analysis using
 an interactive dashboard by running the following code:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">

@@ -64,10 +64,13 @@ trajectory of the body-part along that axis.</p>
 <span>  <span class="va">reference_distance</span>,</span>
 <span>  fps <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>  savgol_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  savgol_filter_smoothing_multiplier <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  median_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  average_window_length <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  shake_threshold <span class="op">=</span> <span class="fl">0.35</span>,</span>
-<span>  window_threshold <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  window_threshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  fixed_baseline <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  y_threshold <span class="op">=</span> <span class="fl">0.1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -118,6 +121,17 @@ to your tracking trajectory.</p></dd>
 <dt>average_window_length</dt>
 <dd><p>The rolling window length of average filter smoothing to apply
 to your tracking trajectory.</p></dd>
+
+
+<dt>fixed_baseline</dt>
+<dd><p>The height (in units of choice) above the lowest y-axis position of the paw, used
+to determine the baseline for activity. the <code>y_threshold</code> parameter is used to set a baseline for this
+level of activity.</p></dd>
+
+
+<dt>y_threshold</dt>
+<dd><p>The threshold (in units of choice) above the fixed baseline at which the start and end
+time-points of activity are determined.</p></dd>
 
 </dl></div>
     <div class="section level2">
