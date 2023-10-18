@@ -132,7 +132,7 @@ plot_univariate_projection(csv_or_path = lp_arm_stim,
 
 Above, you can also alter the `shake_threshold` parameter to make the PAWS algorithm more or less sensitive to detecting shaking behaviors (for instance, try changing 0.35 to 0.10).
 
-Finally, one of the most important thresholds to set is the `window_threshold`, which specifies how sensitive PAWS will be in examining paw trajectories for a withdrawal behavior. Setting a lower threshold will result in higher sensitivity, while a higher threshold will result in lower sensitivity. If you have videos that aren't being scored because the paw activity window was not found (especially common with innocuous stimuli), try setting a lower threshold.
+Finally, one of the most important thresholds to set is the `window_threshold`, which specifies how sensitive PAWS will be in examining paw trajectories for a withdrawal behavior. Setting a lower threshold will result in higher sensitivity, while a higher threshold will result in lower sensitivity for paw withdrawal. If you have videos that aren't being scored because the paw activity window was not found (especially common with innocuous stimuli), try setting a lower threshold.
 
 Before running analysis on our entire dataset, we can prospectively see what the PAWS output for this video would look like by running the function `mini_paws()` on the toe, center, and heel body parts for our CSV:
 
@@ -175,7 +175,7 @@ lp_arm_manual
 
 Finally, if we are happy with the degree of smoothing and diagnostic plots, we're ready to run PAWS on a full set of CSVs. The `paws_analysis()` function uses many of the same parameters as were mentioned earlier, so we will show an example of how to run this using our sample dataset:
 
-[note: the following code will throw a saving error because of how the R Markdown notebook works, but you can set a custom saveDirectory in the function to run it!]
+[note: the following code will throw a saving error because of how the R Markdown notebook is configured, but, if you are running this function in an RStudio environment, you can set a custom saveDirectory in the function to run it!]
 
 ```{r running paws analysis, eval = FALSE}
 paws_analysis(csvDirectory = "demo/sample_data",
@@ -187,9 +187,14 @@ paws_analysis(csvDirectory = "demo/sample_data",
               reference_points = c("objecta", "objectb"), 
               groups = c("arm", "manual"), fps = 2000,
               shake_threshold = 0.35,
-              fixed_baseline = 1,
-              y_threshold = 0.1,)
+              fixed_baseline = 1, y_threshold = 0.1,
+              withdrawal_latency_threshold = 0.001,
+              expanded_analysis = TRUE)
 ```
+
+You'll notice two additional parameters at the bottom of this function: `withdrawal_latency_threshold` and `expanded_analysis`. Setting `expanded_analysis` to `TRUE` enable two additional variables to be exported: t* (t-star), the time-point at which the reflexive response turns into an affective response, and withdrawal latency, or the time-point after paw stimulation at which the paw is physically withdrawn. However, this expanded analysis can only be done under the assumption that the stimulus is applied at the very beginning of the video. If you are working with an experimental setup where you automatically begin recording videos when you apply a given stimulus (or you crop videos post-hoc so they are aligned in this manner), you can set `expanded analysis` to `TRUE` and include withdrawal latency in your analysis. Otherwise, the default for this setting is `FALSE`.
+
+The second value, `withdrawal_latency_threshold`, determines how permissive the algorithm that calculates withdrawal latency will be. Higher values will be more accommodating (which you are encouraged to use if you have poor tracking, or use little smoothing), while lower values will be more stringent and require very little movement to trap velocity. Withdrawal latency is calculated by finding t-star, and then finding the closest time-point before t-star at which the velocity is zero (or near zero, with more accomodating thresholds).
 
 You can also accomplish all of the previous steps and analysis using an interactive dashboard by running the following code:
 
