@@ -43,7 +43,9 @@
 #' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
 #' time-points of activity are determined.
 #' @param withdrawal_latency_threshold The threshold (tolerance) above and below the zero-velocity level before t_star that will
-#' determine the withdrawal latency.
+#' determine the estimated withdrawal latency.
+#' @param expanded_analysis Whether or not to export additional PAWS metrics (t-star, withdrawal latency)
+#' alongside the usual pain score metrics.
 #' @return A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
 #' @import ggplot2
 #' @import pracma

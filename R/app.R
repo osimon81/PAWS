@@ -129,7 +129,10 @@ paws_dashboard <- function() {
                                   choice = c("None", "Average", "Median", "Savitzky-Golay"),
                                   selected = "None"),
                       sliderInput("filter_size_SLEAP", label = "Select a filter length / window size for this filter", min = 3, max = 101,
-                                  value = 25, step = 2)
+                                  value = 25, step = 2),
+                      sliderInput("withdrawal_latency_threshold_SLEAP", label = "Enter the threshold for determining withdrawal latency:", min = 0.001, max = 0.01,
+                                  value = 0.001, step = 0.001),
+                      checkboxInput("expanded_analysis_SLEAP", label = "Run expanded analysis? (exports t-star and withdrawal latency)", value = FALSE)
 
                   )
                 ),
@@ -345,7 +348,9 @@ paws_dashboard <- function() {
                     shake_threshold = input$shake_threshold_SLEAP,
                     fixed_baseline = input$fixed_baseline_SLEAP,
                     y_threshold = input$y_threshold_SLEAP,
-                    window_threshold = input$window_threshold_SLEAP)
+                    window_threshold = input$window_threshold_SLEAP,
+                    withdrawal_latency_threshold = input$withdrawal_latency_threshold_SLEAP,
+                    expanded_analysis = input$expanded_analysis_SLEAP)
     })
 
     observeEvent(input$h5_convert, {

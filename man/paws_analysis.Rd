@@ -21,7 +21,9 @@ paws_analysis(
   fixed_baseline = 0,
   y_threshold = 0.5,
   shake_threshold = 0.35,
-  savgol_filter_smoothing_multiplier = 3
+  savgol_filter_smoothing_multiplier = 3,
+  withdrawal_latency_threshold = 0.001,
+  expanded_analysis = FALSE
 )
 }
 \arguments{
@@ -76,6 +78,12 @@ time-points of activity are determined.}
 for shaking behaviors. Higher values apply a more conservative shaking threshold (Tip:
 if shake segmentation does not match what you see in a video, you can fine-tune the threshold
 to match your observations).}
+
+\item{withdrawal_latency_threshold}{The threshold (tolerance) above and below the zero-velocity level before t_star that will
+determine the estimated withdrawal latency.}
+
+\item{expanded_analysis}{Whether or not to export additional PAWS metrics (t-star, withdrawal latency)
+alongside the usual pain score metrics.}
 }
 \value{
 A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
