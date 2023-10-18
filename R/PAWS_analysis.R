@@ -42,6 +42,8 @@
 #' level of activity.
 #' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
 #' time-points of activity are determined.
+#' @param withdrawal_latency_threshold The threshold (tolerance) above and below the zero-velocity level before t_star that will
+#' determine the withdrawal latency.
 #' @return A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
 #' @import ggplot2
 #' @import pracma
@@ -60,7 +62,9 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           fixed_baseline = 0,
                           y_threshold = 0.5,
                           shake_threshold = 0.35,
-                          savgol_filter_smoothing_multiplier = 3) {
+                          savgol_filter_smoothing_multiplier = 3,
+                          withdrawal_latency_threshold = 0.001,
+                          expanded_analysis = FALSE) {
 
   start_time <- Sys.time()
 
@@ -70,6 +74,17 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                "stimulus", "group", "pre-pain_score", "post-pain_score")
 
   combined_dataframe <- data.frame(matrix(ncol=17,nrow=0, dimnames=list(NULL, headers)))
+
+  if (expanded_analysis == TRUE) {
+    # accommodate extra rows for t* and withdrawal latency measurements
+
+    headers <- c("pre-max_height", "pre-max_x_velocity", "pre-max_y_velocity", "pre-distance_traveled",
+                 "post-max_height", "post-max_x_velocity", "post-max_y_velocity", "post-distance_traveled",
+                 "post-number_of_shakes", "post-shaking_duration", "post-guarding_duration", "body_part", "file",
+                 "stimulus", "group", "pre-pain_score", "post-pain_score", "tstar", "withdrawal_latency")
+
+    combined_dataframe <- data.frame(matrix(ncol=19,nrow=0, dimnames=list(NULL, headers)))
+  }
 
   params <- set_parameters(fps = fps,
                            shake.threshold = shake_threshold,
@@ -305,21 +320,51 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
 
     for (body_part in body_parts) {
 
-      tryCatch(combined_dataframe[nrow(combined_dataframe)+1,] <- c(features[[body_part]][['pre.peak']]$max.height,
-                                                                    features[[body_part]][['pre.peak']]$max.x.velocity,
-                                                                    features[[body_part]][['pre.peak']]$max.y.velocity,
-                                                                    features[[body_part]][['pre.peak']]$distance.traveled,
-                                                                    features[[body_part]][['post.peak']]$max.height,
-                                                                    features[[body_part]][['post.peak']]$max.x.velocity,
-                                                                    features[[body_part]][['post.peak']]$max.y.velocity,
-                                                                    features[[body_part]][['post.peak']]$distance.traveled,
-                                                                    features[[body_part]][['post.peak']]$number.of.shakes,
-                                                                    features[[body_part]][['post.peak']]$shaking.duration,
-                                                                    features[[body_part]][['post.peak']]$guarding.duration,
-                                                                    body_part, file_names[i], stim, group,
-                                                                    pain_scores[[body_part]][['pre.peak']],
-                                                                    pain_scores[[body_part]][['post.peak']]),
-               error = function(e) {skip_to_next <- TRUE})
+      if (expanded_analysis) {
+        tryCatch(combined_dataframe[nrow(combined_dataframe)+1,] <- c(features[[body_part]][['pre.peak']]$max.height,
+                                                                      features[[body_part]][['pre.peak']]$max.x.velocity,
+                                                                      features[[body_part]][['pre.peak']]$max.y.velocity,
+                                                                      features[[body_part]][['pre.peak']]$distance.traveled,
+                                                                      features[[body_part]][['post.peak']]$max.height,
+                                                                      features[[body_part]][['post.peak']]$max.x.velocity,
+                                                                      features[[body_part]][['post.peak']]$max.y.velocity,
+                                                                      features[[body_part]][['post.peak']]$distance.traveled,
+                                                                      features[[body_part]][['post.peak']]$number.of.shakes,
+                                                                      features[[body_part]][['post.peak']]$shaking.duration,
+                                                                      features[[body_part]][['post.peak']]$guarding.duration,
+                                                                      body_part, file_names[i], stim, group,
+                                                                      pain_scores[[body_part]][['pre.peak']],
+                                                                      pain_scores[[body_part]][['post.peak']],
+                                                                      features[[body_part]][['time.series']]$tstar / fps,
+                                                                      # clunky but should work!
+                                                                      which.min(abs(which(diff(tracks[[body_part]][['y']]) > -1*withdrawal_latency_threshold
+                                                                                          & diff(tracks[[body_part]][['y']]) < withdrawal_latency_threshold)
+                                                                                    - features[[body_part]][['time.series']]$tstar)) / fps),
+
+
+
+                 error = function(e) {skip_to_next <- TRUE})
+      } else {
+
+        tryCatch(combined_dataframe[nrow(combined_dataframe)+1,] <- c(features[[body_part]][['pre.peak']]$max.height,
+                                                                      features[[body_part]][['pre.peak']]$max.x.velocity,
+                                                                      features[[body_part]][['pre.peak']]$max.y.velocity,
+                                                                      features[[body_part]][['pre.peak']]$distance.traveled,
+                                                                      features[[body_part]][['post.peak']]$max.height,
+                                                                      features[[body_part]][['post.peak']]$max.x.velocity,
+                                                                      features[[body_part]][['post.peak']]$max.y.velocity,
+                                                                      features[[body_part]][['post.peak']]$distance.traveled,
+                                                                      features[[body_part]][['post.peak']]$number.of.shakes,
+                                                                      features[[body_part]][['post.peak']]$shaking.duration,
+                                                                      features[[body_part]][['post.peak']]$guarding.duration,
+                                                                      body_part, file_names[i], stim, group,
+                                                                      pain_scores[[body_part]][['pre.peak']],
+                                                                      pain_scores[[body_part]][['post.peak']]),
+                 error = function(e) {skip_to_next <- TRUE})
+
+      }
+
+
 
       if(skip_to_next) { next }
 
@@ -332,15 +377,21 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
 
   message("Done! Processed ", as.character(index-1), " file(s) in ", round((Sys.time()-start_time), 3), " seconds.")
 
+  if (expanded_analysis == FALSE) {
+    combined_dataframe <- combined_dataframe[, c(15, 12, 14, 16, 17, 1:11, 13)]
+    combined_dataframe <- combined_dataframe[
+      order(combined_dataframe[,1], combined_dataframe[,2], combined_dataframe[,3]),
+    ]
+  } else if (expanded_analysis == TRUE) {
+    combined_dataframe <- combined_dataframe[, c(15, 12, 14, 16, 17, 1:11, 18:19, 13)]
+    combined_dataframe <- combined_dataframe[
+      order(combined_dataframe[,1], combined_dataframe[,2], combined_dataframe[,3]),
+    ]
+  }
 
-  combined_dataframe <- combined_dataframe[, c(15, 12, 14, 16, 17, 1:11, 13)]
-  combined_dataframe <- combined_dataframe[
-    order(combined_dataframe[,1], combined_dataframe[,2], combined_dataframe[,3]),
-  ]
 
   write.csv(combined_dataframe, paste0(save_directory, "/", "PAWS_Results.csv"), row.names = FALSE)
 }
-
 
 
 
