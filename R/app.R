@@ -130,8 +130,8 @@ paws_dashboard <- function() {
                                   selected = "None"),
                       sliderInput("filter_size_SLEAP", label = "Select a filter length / window size for this filter", min = 3, max = 101,
                                   value = 25, step = 2),
-                      sliderInput("withdrawal_latency_threshold_SLEAP", label = "Enter the threshold for determining withdrawal latency:", min = 0.001, max = 0.01,
-                                  value = 0.001, step = 0.001),
+                      sliderInput("withdrawal_latency_threshold_SLEAP", label = "Enter the threshold for determining withdrawal latency:", min = 0, max = 10,
+                                  value = 2, step = 0.5),
                       checkboxInput("expanded_analysis_SLEAP", label = "Run expanded analysis? (exports t-star and withdrawal latency)", value = FALSE)
 
                   )
