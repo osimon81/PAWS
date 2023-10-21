@@ -337,7 +337,7 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                                                                       pain_scores[[body_part]][['pre.peak']],
                                                                       pain_scores[[body_part]][['post.peak']],
                                                                       features[[body_part]][['time.series']]$tstar / fps, # t*
-                                                                      which(tracks[[body_part]][['y']] > withdrawal_latency_threshold) / fps), # withdrawal latency
+                                                                      which(tracks[[body_part]][['y']] > withdrawal_latency_threshold)[[1]] / fps), # withdrawal latency
 
 
 
