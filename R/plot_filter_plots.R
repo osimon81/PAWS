@@ -29,8 +29,8 @@
 #' @return A figure with panels (each indicating the plotted track under a given filter
 #' and level and smoothing).
 #' @import ggplot2
-#' @import pracma
-#' @import data.table
+#' @importFrom pracma savgol
+#' @importFrom data.table frollmean
 #' @import ggpubr
 #' @import pawscore
 #' @export
@@ -201,8 +201,8 @@ plot_filter_graphs <- function(csv_or_path, p_cutoff, reference_distance = NA,
 #' @return A figure with diagnostic panels (indicating unannotated and annotated univariate projections,
 #' and estimated horizontal and vertical positions and velocities).
 #' @import ggplot2
-#' @import pracma
-#' @import data.table
+#' @importFrom pracma savgol
+#' @importFrom data.table frollmean
 #' @import ggpubr
 #' @import pawscore
 #' @export
@@ -363,8 +363,8 @@ plot_univariate_projection <- function(csv_or_path, manual_scale_factor = NA, p_
 #' to match your observations).
 #' @return A data frame in RStudio containing PAWS scores for a single file.
 #' @import ggplot2
-#' @import pracma
-#' @import data.table
+#' @importFrom pracma savgol
+#' @importFrom data.table frollmean
 #' @import ggpubr
 #' @import pawscore
 #' @export

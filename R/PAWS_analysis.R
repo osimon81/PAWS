@@ -42,14 +42,13 @@
 #' level of activity.
 #' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
 #' time-points of activity are determined.
-#' @param withdrawal_latency_threshold The threshold (tolerance) above and below the zero-velocity level before t_star that will
-#' determine the estimated withdrawal latency.
+#' @param withdrawal_latency_threshold The height (in units of choice) at which to screen for withdrawal.
 #' @param expanded_analysis Whether or not to export additional PAWS metrics (t-star, withdrawal latency)
 #' alongside the usual pain score metrics.
 #' @return A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
 #' @import ggplot2
-#' @import pracma
-#' @import data.table
+#' @importFrom pracma savgol
+#' @importFrom data.table frollmean
 #' @import ggpubr
 #' @import stringr
 #' @import dplyr
@@ -337,11 +336,8 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                                                                       body_part, file_names[i], stim, group,
                                                                       pain_scores[[body_part]][['pre.peak']],
                                                                       pain_scores[[body_part]][['post.peak']],
-                                                                      features[[body_part]][['time.series']]$tstar / fps,
-                                                                      # clunky but should work!
-                                                                      which.min(abs(which(diff(tracks[[body_part]][['y']]) > -1*withdrawal_latency_threshold
-                                                                                          & diff(tracks[[body_part]][['y']]) < withdrawal_latency_threshold)
-                                                                                    - features[[body_part]][['time.series']]$tstar)) / fps),
+                                                                      features[[body_part]][['time.series']]$tstar / fps, # t*
+                                                                      which(tracks[[body_part]][['y']] > withdrawal_latency_threshold) / fps), # withdrawal latency
 
 
 

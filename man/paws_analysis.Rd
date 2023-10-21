@@ -79,8 +79,7 @@ for shaking behaviors. Higher values apply a more conservative shaking threshold
 if shake segmentation does not match what you see in a video, you can fine-tune the threshold
 to match your observations).}
 
-\item{withdrawal_latency_threshold}{The threshold (tolerance) above and below the zero-velocity level before t_star that will
-determine the estimated withdrawal latency.}
+\item{withdrawal_latency_threshold}{The height (in units of choice) at which to screen for withdrawal.}
 
 \item{expanded_analysis}{Whether or not to export additional PAWS metrics (t-star, withdrawal latency)
 alongside the usual pain score metrics.}

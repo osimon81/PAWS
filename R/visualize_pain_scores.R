@@ -8,10 +8,9 @@
 #' @param peak Whether to plot pre-peak (`pre`) or post-peak (`post`) pain scores.
 #' @return A density plot of pain score distributions.
 #' @import ggplot2
-#' @import pracma
+#' @importFrom pracma savgol
 #' @import ggpubr
 #' @import dplyr
-#' @import magrittr
 #' @import pawscore
 #' @export
 plot_pain_scores <- function(csv_path, peak = "pre") {
@@ -100,8 +99,8 @@ plot_pain_scores <- function(csv_path, peak = "pre") {
 #' `post-peak guarding duration`
 #' @return A bar plot of PAWS features over a distribution.
 #' @import ggplot2
-#' @import pracma
-#' @import data.table
+#' @importFrom pracma savgol
+#' @importFrom data.table frollmean
 #' @import ggpubr
 #' @import pawscore
 #' @export
