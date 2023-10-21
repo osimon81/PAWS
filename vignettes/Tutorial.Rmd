@@ -188,7 +188,7 @@ paws_analysis(csvDirectory = "demo/sample_data",
               groups = c("arm", "manual"), fps = 2000,
               shake_threshold = 0.35,
               fixed_baseline = 1, y_threshold = 0.1,
-              withdrawal_latency_threshold = 0.1,
+              withdrawal_latency_threshold = 4,
               expanded_analysis = TRUE)
 ```
 
