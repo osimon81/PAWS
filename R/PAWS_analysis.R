@@ -42,8 +42,9 @@
 #' level of activity.
 #' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
 #' time-points of activity are determined.
-#' @param stimulus_velocity_factor The 'b' term in a*sin(bx - c) + d used to fit the stimulus sine function.
-#' @param stimulus_displacement_factor The 'c' term in a*sin(bx - c) + d used to fit the stimulus sine function.
+#' @param stimulus_velocity_factor The 'b' term in a*sin(b(x - c)) + d used to fit the stimulus sine function.
+#' @param stimulus_displacement_factor The 'c' term in a*sin(b(x - c)) + d -- number of seconds
+#' after video starts until the stimulus contacts the paw.
 #' @param expanded_analysis Whether or not to export additional PAWS metrics (t-star, withdrawal latency)
 #' alongside the usual pain score metrics.
 #' @return A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
@@ -61,8 +62,8 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           body_parts = c("toe", "center", "heel"),
                           reference_points = c("objecta", "objectb"),
                           groups, fps = 2000, window_threshold = 0.5,
-                          fixed_baseline = 0,
-                          y_threshold = 0.5,
+                          fixed_baseline = 3,
+                          y_threshold = 1.5,
                           shake_threshold = 0.35,
                           savgol_filter_smoothing_multiplier = 3,
                           expanded_analysis = FALSE,
@@ -262,7 +263,7 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
 
     if (expanded_analysis) {
       x = 1:frames
-      stim_y = y_threshold*sin(b*x-c) + fixed_baseline
+      stim_y = y_threshold*sin(b*(x-(fps*c))) + fixed_baseline
       stim_y[stim_y<fixed_baseline] = fixed_baseline
     }
 
