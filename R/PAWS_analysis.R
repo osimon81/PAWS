@@ -42,7 +42,8 @@
 #' level of activity.
 #' @param y_threshold The threshold (in units of choice) above the fixed baseline at which the start and end
 #' time-points of activity are determined.
-#' @param withdrawal_latency_threshold The height (in units of choice) at which to screen for withdrawal.
+#' @param stimulus_velocity_factor The 'b' term in a*sin(bx - c) + d used to fit the stimulus sine function.
+#' @param stimulus_displacement_factor The 'c' term in a*sin(bx - c) + d used to fit the stimulus sine function.
 #' @param expanded_analysis Whether or not to export additional PAWS metrics (t-star, withdrawal latency)
 #' alongside the usual pain score metrics.
 #' @return A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
@@ -64,8 +65,9 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           y_threshold = 0.5,
                           shake_threshold = 0.35,
                           savgol_filter_smoothing_multiplier = 3,
-                          withdrawal_latency_threshold = 0.001,
-                          expanded_analysis = FALSE) {
+                          expanded_analysis = FALSE,
+                          stimulus_velocity_factor = 0.0798,
+                          stimulus_displacement_factor = 0.169) {
 
   start_time <- Sys.time()
 
@@ -256,6 +258,14 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
       }
     }
 
+    # calculate stimulus trajectory (use only if indicated)
+
+    if (expanded_analysis) {
+      x = 1:frames
+      stim_y = y_threshold*sin(b*x-c) + fixed_baseline
+      stim_y[stim_y<fixed_baseline] = fixed_baseline
+    }
+
     # Extract features (x and y coordinates) for toe, center, and heel
 
     message("Extracting features and applying mm/px scale factor ", round(scale_factor, 6), "...")
@@ -337,12 +347,13 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                                                                       pain_scores[[body_part]][['pre.peak']],
                                                                       pain_scores[[body_part]][['post.peak']],
                                                                       features[[body_part]][['time.series']]$tstar / fps, # t*
-                                                                      which(tracks[[body_part]][['y']] > withdrawal_latency_threshold)[[1]] / fps), # withdrawal latency
+                                                                      min(na.omit(which(tracks[[body_part]][['y']] > stim_y))) / fps), # withdrawal latency
 
 
 
                  error = function(e) {skip_to_next <- TRUE})
       } else {
+
 
         tryCatch(combined_dataframe[nrow(combined_dataframe)+1,] <- c(features[[body_part]][['pre.peak']]$max.height,
                                                                       features[[body_part]][['pre.peak']]$max.x.velocity,
