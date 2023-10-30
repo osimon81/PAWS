@@ -68,7 +68,7 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                           savgol_filter_smoothing_multiplier = 3,
                           expanded_analysis = FALSE,
                           stimulus_velocity_factor = 0.0798,
-                          stimulus_displacement_factor = 0.169) {
+                          stimulus_displacement_factor = 0.17) {
 
   start_time <- Sys.time()
 

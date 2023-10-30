@@ -132,7 +132,11 @@ paws_dashboard <- function() {
                                   value = 25, step = 2),
                       sliderInput("withdrawal_latency_threshold_SLEAP", label = "Enter the threshold for determining withdrawal latency:", min = 0, max = 10,
                                   value = 2, step = 0.5),
-                      checkboxInput("expanded_analysis_SLEAP", label = "Run expanded analysis? (exports t-star and withdrawal latency)", value = FALSE)
+                      checkboxInput("expanded_analysis_SLEAP", label = "Run expanded analysis? (exports t-star and withdrawal latency)", value = FALSE),
+                      numericInput("velocity_factor_SLEAP", label = "[For expanded analysis only] enter the velocity term b in asin(bx)+d to fit sinusoidal stimulus trajectory:",
+                                   value = 0.0798),
+                      numericInput("displacement_factor_SLEAP", label = "[For expanded analysis] enter the time (seconds) after your video at which the stimulus contacts the paw:",
+                                   value = 0.17)
 
                   )
                 ),
@@ -350,7 +354,9 @@ paws_dashboard <- function() {
                     y_threshold = input$y_threshold_SLEAP,
                     window_threshold = input$window_threshold_SLEAP,
                     withdrawal_latency_threshold = input$withdrawal_latency_threshold_SLEAP,
-                    expanded_analysis = input$expanded_analysis_SLEAP)
+                    expanded_analysis = input$expanded_analysis_SLEAP,
+                    stimulus_velocity_factor = input$velocity_factor_SLEAP,
+                    stimulus_displacement_factor = input$displacement_factor_SLEAP)
     })
 
     observeEvent(input$h5_convert, {
