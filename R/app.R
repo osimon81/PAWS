@@ -353,7 +353,6 @@ paws_dashboard <- function() {
                     fixed_baseline = input$fixed_baseline_SLEAP,
                     y_threshold = input$y_threshold_SLEAP,
                     window_threshold = input$window_threshold_SLEAP,
-                    withdrawal_latency_threshold = input$withdrawal_latency_threshold_SLEAP,
                     expanded_analysis = input$expanded_analysis_SLEAP,
                     stimulus_velocity_factor = input$velocity_factor_SLEAP,
                     stimulus_displacement_factor = input$displacement_factor_SLEAP)

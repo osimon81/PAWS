@@ -18,12 +18,13 @@ paws_analysis(
   groups,
   fps = 2000,
   window_threshold = 0.5,
-  fixed_baseline = 0,
-  y_threshold = 0.5,
+  fixed_baseline = 3,
+  y_threshold = 1.5,
   shake_threshold = 0.35,
   savgol_filter_smoothing_multiplier = 3,
-  withdrawal_latency_threshold = 0.001,
-  expanded_analysis = FALSE
+  expanded_analysis = FALSE,
+  stimulus_velocity_factor = 0.0798,
+  stimulus_displacement_factor = 0.17
 )
 }
 \arguments{
@@ -79,10 +80,13 @@ for shaking behaviors. Higher values apply a more conservative shaking threshold
 if shake segmentation does not match what you see in a video, you can fine-tune the threshold
 to match your observations).}
 
-\item{withdrawal_latency_threshold}{The height (in units of choice) at which to screen for withdrawal.}
-
 \item{expanded_analysis}{Whether or not to export additional PAWS metrics (t-star, withdrawal latency)
 alongside the usual pain score metrics.}
+
+\item{stimulus_velocity_factor}{The 'b' term in a*sin(b(x - c)) + d used to fit the stimulus sine function.}
+
+\item{stimulus_displacement_factor}{The 'c' term in a*sin(b(x - c)) + d -- number of seconds
+after video starts until the stimulus contacts the paw.}
 }
 \value{
 A single CSV grouped by both stimulus and experimental group, containing PAWS metrics for each body-part.
