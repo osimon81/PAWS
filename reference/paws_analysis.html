@@ -69,12 +69,13 @@ into a single CSV containing pre- and post-peak metrics.</p>
 <span>  <span class="va">groups</span>,</span>
 <span>  fps <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>  window_threshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  fixed_baseline <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  y_threshold <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  fixed_baseline <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  y_threshold <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>  shake_threshold <span class="op">=</span> <span class="fl">0.35</span>,</span>
 <span>  savgol_filter_smoothing_multiplier <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  withdrawal_latency_threshold <span class="op">=</span> <span class="fl">0.001</span>,</span>
-<span>  expanded_analysis <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  expanded_analysis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  stimulus_velocity_factor <span class="op">=</span> <span class="fl">0.0798</span>,</span>
+<span>  stimulus_displacement_factor <span class="op">=</span> <span class="fl">0.17</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -162,13 +163,18 @@ if shake segmentation does not match what you see in a video, you can fine-tune 
 to match your observations).</p></dd>
 
 
-<dt>withdrawal_latency_threshold</dt>
-<dd><p>The height (in units of choice) at which to screen for withdrawal.</p></dd>
-
-
 <dt>expanded_analysis</dt>
 <dd><p>Whether or not to export additional PAWS metrics (t-star, withdrawal latency)
 alongside the usual pain score metrics.</p></dd>
+
+
+<dt>stimulus_velocity_factor</dt>
+<dd><p>The 'b' term in a*sin(b(x - c)) + d used to fit the stimulus sine function.</p></dd>
+
+
+<dt>stimulus_displacement_factor</dt>
+<dd><p>The 'c' term in a*sin(b(x - c)) + d -- number of seconds
+after video starts until the stimulus contacts the paw.</p></dd>
 
 </dl></div>
     <div class="section level2">
