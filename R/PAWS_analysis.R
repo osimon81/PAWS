@@ -85,9 +85,9 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     headers <- c("pre-max_height", "pre-max_x_velocity", "pre-max_y_velocity", "pre-distance_traveled",
                  "post-max_height", "post-max_x_velocity", "post-max_y_velocity", "post-distance_traveled",
                  "post-number_of_shakes", "post-shaking_duration", "post-guarding_duration", "body_part", "file",
-                 "stimulus", "group", "pre-pain_score", "post-pain_score", "tstar", "withdrawal_latency")
+                 "stimulus", "group", "pre-pain_score", "post-pain_score", "withdrawal_latency")
 
-    combined_dataframe <- data.frame(matrix(ncol=19,nrow=0, dimnames=list(NULL, headers)))
+    combined_dataframe <- data.frame(matrix(ncol=18,nrow=0, dimnames=list(NULL, headers)))
   }
 
   params <- set_parameters(fps = fps,
@@ -165,8 +165,6 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
 
     raw_csv <- raw_csv[-c(1:3),]
     raw_csv <- as.data.frame(sapply(raw_csv, as.numeric))
-
-    frames <- as.numeric(length(raw_csv[,1]))
 
     # create tracks object which stores trajectories and likelihoods for entire video
 
@@ -259,12 +257,31 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
       }
     }
 
+    ###### scale axis based on fps ###### (EXPERIMENTAL)
+
+
+    for (body_part in body_parts) {
+      tracks[[body_part]][['x']] <- resize(input = tracks[[body_part]][['x']], len = (2000*length(tracks[[body_part]][['x']])/fps))
+      tracks[[body_part]][['y']] <- resize(input = tracks[[body_part]][['y']], len = (2000*length(tracks[[body_part]][['y']])/fps))
+    }
+
+    frames <- as.numeric(length(tracks[[1]][['y']]))
+
     # calculate stimulus trajectory (use only if indicated)
 
     if (expanded_analysis) {
-      x = 1:frames
-      stim_y = y_threshold*sin(b*(x-(fps*c))) + fixed_baseline
+      x = 1:length(tracks[[1]][[2]])
+      stim_y = y_threshold*sin(stimulus_velocity_factor*(x-(fps*stimulus_displacement_factor*fps))) + fixed_baseline
       stim_y[stim_y<fixed_baseline] = fixed_baseline
+      stim_y[1:round(stimulus_displacement_factor*fps)] = fixed_baseline
+      post_stim_vec = diff(stim_y)
+
+      post_stim_vec = which(diff(stim_y) != 0)
+      stim_end = which(diff(post_stim_vec) > 1)[1]
+      stim_end_frame = post_stim_vec[stim_end]
+
+      tryCatch(stim_y[stim_end_frame:length(stim_y)] <- fixed_baseline,
+               error = function(e) {message("Warning: Error detecting end of stimulus.")})
     }
 
     # Extract features (x and y coordinates) for toe, center, and heel
@@ -285,7 +302,10 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
 
       tryCatch(features[[body_part]] <- extract_features(x = (as.numeric(na.omit(tracks[[body_part]][['x']])) * scale_factor),
                                                          y = (as.numeric(na.omit(tracks[[body_part]][['y']])) * scale_factor),
-                                                         parameters = params),
+                                                         parameters = set_parameters(
+                                                           fixed.baseline = list(y = fixed_baseline,
+                                                                                 threshold = y_threshold),
+                                                           based.on = params)),
                error = function(e) { skip_to_next <- TRUE})
 
       if(skip_to_next) { next }
@@ -337,18 +357,17 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
                                                                       features[[body_part]][['pre.peak']]$max.x.velocity,
                                                                       features[[body_part]][['pre.peak']]$max.y.velocity,
                                                                       features[[body_part]][['pre.peak']]$distance.traveled,
-                                                                      features[[body_part]][['post.peak']]$max.height,
+                                                                      features[[body_part]][['post.peak']]$max.height, #5
                                                                       features[[body_part]][['post.peak']]$max.x.velocity,
                                                                       features[[body_part]][['post.peak']]$max.y.velocity,
                                                                       features[[body_part]][['post.peak']]$distance.traveled,
                                                                       features[[body_part]][['post.peak']]$number.of.shakes,
-                                                                      features[[body_part]][['post.peak']]$shaking.duration,
+                                                                      features[[body_part]][['post.peak']]$shaking.duration, #10
                                                                       features[[body_part]][['post.peak']]$guarding.duration,
-                                                                      body_part, file_names[i], stim, group,
+                                                                      body_part, file_names[i], stim, group[1], #15
                                                                       pain_scores[[body_part]][['pre.peak']],
                                                                       pain_scores[[body_part]][['post.peak']],
-                                                                      features[[body_part]][['time.series']]$tstar / fps, # t*
-                                                                      min(na.omit(which(tracks[[body_part]][['y']] > stim_y))) / fps), # withdrawal latency
+                                                                      which(tracks[[body_part]][['y']] > stim_y)[1] / 2000), # withdrawal latency
 
 
 
@@ -393,7 +412,7 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
       order(combined_dataframe[,1], combined_dataframe[,2], combined_dataframe[,3]),
     ]
   } else if (expanded_analysis == TRUE) {
-    combined_dataframe <- combined_dataframe[, c(15, 12, 14, 16, 17, 1:11, 18:19, 13)]
+    combined_dataframe <- combined_dataframe[, c(15, 12, 14, 16, 17, 1:11, 18, 13)]
     combined_dataframe <- combined_dataframe[
       order(combined_dataframe[,1], combined_dataframe[,2], combined_dataframe[,3]),
     ]
