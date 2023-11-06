@@ -259,11 +259,12 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
 
     ###### scale axis based on fps ###### (EXPERIMENTAL)
 
-
-    for (body_part in body_parts) {
-      tracks[[body_part]][['x']] <- resize(input = tracks[[body_part]][['x']], len = (2000*length(tracks[[body_part]][['x']])/fps))
-      tracks[[body_part]][['y']] <- resize(input = tracks[[body_part]][['y']], len = (2000*length(tracks[[body_part]][['y']])/fps))
-    }
+    # resize <- function (input, len) approx(seq_along(input), input, n = len)$y
+    #
+    # for (body_part in body_parts) {
+    #   tracks[[body_part]][['x']] <- resize(input = tracks[[body_part]][['x']], len = (2000*length(tracks[[body_part]][['x']])/fps))
+    #   tracks[[body_part]][['y']] <- resize(input = tracks[[body_part]][['y']], len = (2000*length(tracks[[body_part]][['y']])/fps))
+    # }
 
     frames <- as.numeric(length(tracks[[1]][['y']]))
 
