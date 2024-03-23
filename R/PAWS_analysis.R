@@ -90,7 +90,7 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     combined_dataframe <- data.frame(matrix(ncol=18,nrow=0, dimnames=list(NULL, headers)))
   }
 
-  params <- set_parameters(fps = fps,
+  params <- set_parameters(fps = 2000, # FIX THIS WHEN FPS DOWNSAMPLING IS PATCHED
                            shake.threshold = shake_threshold,
                            window.threshold = window_threshold,
                            fixed.baseline = list(y = fixed_baseline,
@@ -226,11 +226,52 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
     # calculating confident scale factor for video (using distance formula):
 
     if (is.na(manual_scale_factor)) {
-      scale_factor <- reference_distance / sqrt((mean(reference[[1]][['x']]) - mean(reference[[2]][['x']]))^2 +
-                                                  (mean(reference[[1]][['y']]) - mean(reference[[2]][['y']]))^2)
+      scale_factor <- reference_distance / sqrt((mean(reference[[1]][['x']], na.rm = TRUE) - mean(reference[[2]][['x']], na.rm = TRUE))^2 +
+                                                  (mean(reference[[1]][['y']], na.rm = TRUE) - mean(reference[[2]][['y']], na.rm = TRUE))^2)
     } else {
       scale_factor <- manual_scale_factor
     }
+
+    ###### scale axis based on fps ###### (EXPERIMENTAL)
+    message("Scaling ", fps, " fps...")
+
+    resize <- function(input, len, current_fps, target_fps) {
+      # Calculate the scaling factor based on the ratio of current and target FPS
+      scaling_factor <- target_fps / current_fps
+
+      # Calculate the new length of the scaled data
+      new_len <- len * scaling_factor
+
+      # Use `approx` to interpolate the input data to the new length
+      approximated_data <- approx(seq_along(input), input, n = new_len)
+
+      # Return the scaled data
+      return(approximated_data$y)
+    }
+
+
+    for (body_part in body_parts) {
+      tryCatch(tracks[[body_part]][['x']] <- resize(input = tracks[[body_part]][['x']], len = length(tracks[[body_part]][['x']]),
+                                                    current_fps = fps, target_fps = 2000),
+               error = function(e) { skip_to_next <- TRUE})
+      if(skip_to_next) { next }
+
+      tryCatch(tracks[[body_part]][['y']] <- resize(input = tracks[[body_part]][['y']], len = length(tracks[[body_part]][['y']]),
+                                                    current_fps = fps, target_fps = 2000),
+               error = function(e) { skip_to_next <- TRUE})
+      if(skip_to_next) { next }
+
+      tryCatch(tracks[[body_part]][['p']] <- resize(input = tracks[[body_part]][['p']], len = length(tracks[[body_part]][['p']]),
+                                                    current_fps = fps, target_fps = 2000),
+               error = function(e) { skip_to_next <- TRUE})
+      if(skip_to_next) { next }
+
+    }
+
+    frames <- as.numeric(length(tracks[[1]][['y']]))
+
+    ##########################################
+
 
     # apply filter if one is chosen
 
@@ -257,16 +298,6 @@ paws_analysis <- function(csv_directory, save_directory, p_cutoff = 0.30,
       }
     }
 
-    ###### scale axis based on fps ###### (EXPERIMENTAL)
-
-    # resize <- function (input, len) approx(seq_along(input), input, n = len)$y
-    #
-    # for (body_part in body_parts) {
-    #   tracks[[body_part]][['x']] <- resize(input = tracks[[body_part]][['x']], len = (2000*length(tracks[[body_part]][['x']])/fps))
-    #   tracks[[body_part]][['y']] <- resize(input = tracks[[body_part]][['y']], len = (2000*length(tracks[[body_part]][['y']])/fps))
-    # }
-
-    frames <- as.numeric(length(tracks[[1]][['y']]))
 
     # calculate stimulus trajectory (use only if indicated)
 
